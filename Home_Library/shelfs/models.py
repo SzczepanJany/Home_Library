@@ -58,7 +58,7 @@ class UserItem(models.Model):
     is_owner = models.BooleanField(default=False)
     is_editor = models.BooleanField(default=False)
     nr_of_copies = models.IntegerField(default=1)
-    
+
 
 class Serie(models.Model):
     name = models.CharField(max_length=128)
@@ -91,7 +91,6 @@ class Item(models.Model):
     user = models.ManyToManyField(User, through=UserItem, related_name='items')
     isbn = models.CharField(max_length=13)
     genre = models.ManyToManyField(Genre)
-    owner = models.ManyToManyField(Owner)
     description = models.OneToOneField(Description, on_delete=CASCADE, null=True)
     cathegory = models.IntegerField(choices=CATHEGORY)
     year = models.IntegerField(null=True)
