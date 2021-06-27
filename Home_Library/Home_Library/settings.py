@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+MEDIA_ROOT = "/home/leeseck/Dokumenty/CodersLab/Final/Home_Library/Home_Library/media/"
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'languages',
 ]
+
+AUTH_USER_MODEL = 'shelfs.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

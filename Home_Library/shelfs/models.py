@@ -1,13 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models.aggregates import Max
 from django.db.models.deletion import CASCADE
-from django.db.models.fields import CharField
 from languages.fields import LanguageField, RegionField
 from datetime import date
-
-class User(AbstractUser):
-    pass
+from django.conf import settings
 
 
 CATHEGORY = (
@@ -40,62 +36,63 @@ RATE = (
     (6, 'Briliant'),
 )
 
-class Description(models.Model):
-    pass
 
+class Description(models.Model):
+    file = models.FileField()
+    text = models.CharField(max_length=400)
+
+
+class User(AbstractUser):
+    birthday = models.DateField(null=True)
+    death = models.DateField(null=True)
+    plc_of_brth = models.CharField(30, null=True)
+    plc_of_dth = models.CharField(30, null=True)
+    nationality = LanguageField()
+    description = models.OneToOneField('Description', on_delete=CASCADE, null=True, related_name='users')
+    
+
+class UserItem(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_items')
+    item = models.ForeignKey('Item', related_name='user_items')
+    is_author = models.BooleanField(default=False)
+    is_owner = models.BooleanField(default=False)
+    is_editor = models.BooleanField(default=False)
+    nr_of_copies = models.IntegerField(default=1)
+    
 
 class Serie(models.Model):
     name = models.CharField(max_length=128)
     world = models.CharField(max_length=128)
     nr_of_volumes = models.IntegerField(default=1)
-    description = models.ForeignKey(Description, on_delete=CASCADE, null=True)
+    description = models.OneToOneField(Description, on_delete=CASCADE, null=True, related_name='series')
 
 
 class Publisher(models.Model):
     name = models.CharField(128)
     city = models.CharField(128, null=True)
     country = LanguageField()
-    description = models.ForeignKey(Description, on_delete=CASCADE, null=True)
+    description = models.ForeigOneToOneFieldnKey(Description, on_delete=CASCADE, null=True, related_name='publishers')
 
 
 class Rate(models.Model):
-    item = models.OneToOneField('Item')
-    user = models.ForeignKey(User, on_delete=CASCADE)
+    item = models.OneToOneField('Item', related_name='rates')
+    user = models.OneToOneField(User, on_delete=CASCADE, related_name='rates')
     rate = models.IntegerField(choices=RATE)
-    description = models.ForeignKey(Description, on_delete=CASCADE, null=True)
-
-
-#models.Model czy models.User
-class Author(models.Model):
-    author = models.ForeignKey(User, on_delete=CASCADE)
-    item = models.ManyToManyField('Item')
-    role = models.IntegerField(choices=AUTHOR_ROLE)
-    birthday = models.DateField(null=True)
-    death = models.DateField(null=True)
-    plc_of_brth = models.CharField(30, null=True)
-    plc_of_dth = models.CharField(30, null=True)
-    nationality = LanguageField()
-    description = models.ForeignKey(Description, on_delete=CASCADE, null=True)
-
-
-class Owner(models.Model):
-    owner = models.ForeignKey(User, on_delete=CASCADE)
-    item = models.ManyToManyField('Item')
-    nr_of_copies = models.IntegerField(default=1)
+    description = models.OneToOneField(Description, on_delete=CASCADE, null=True, related_name='rates')
 
 
 class Genre(models.Model):
     name = models.CharField(max_length=20)
-    description = models.ForeignKey(Description, on_delete=CASCADE, null=True)
+    description = models.OneToOneField(Description, on_delete=CASCADE, null=True)
 
 
 class Item(models.Model):
     title = models.CharField(max_length=128)
-    author = models.ManyToManyField(Author)
+    user = models.ManyToManyField(User, through=UserItem, related_name='items')
     isbn = models.CharField(max_length=13)
     genre = models.ManyToManyField(Genre)
     owner = models.ManyToManyField(Owner)
-    description = models.ForeignKey(Description, on_delete=CASCADE, null=True)
+    description = models.OneToOneField(Description, on_delete=CASCADE, null=True)
     cathegory = models.IntegerField(choices=CATHEGORY)
     year = models.IntegerField(null=True)
     serie = models.ForeignKey(Serie, on_delete=CASCADE, null=True)
@@ -109,9 +106,10 @@ class Item(models.Model):
 
 
 class Loan(models.Model):
-    item = models.ForeignKey(Item, on_delete=CASCADE)
-    user = models.ForeignKey(User, on_delete=CASCADE)
+    item = models.ForeignKey(Item, on_delete=CASCADE, related_name='loans')
+    user = models.ForeignKey(User, on_delete=CASCADE, related_name='loans')
     date_of_loan = models.DateField(default=date.today())
     date_of_return = models.DateField(null=True)
     in_loan = models.BooleanField(default=True)
+    description = models.OneToOneField(Description, on_delete=CASCADE, null=True, related_name='loans')
 
