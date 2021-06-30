@@ -25,6 +25,9 @@ urlpatterns = [
     path('main/', shelf_view.Library.as_view(), name="index"),
     path('logout/', shelf_view.UserLogoutView.as_view(), name ='logout'),
     path('add_user/', shelf_view.CreateUserView.as_view(), name ='add_user'),
+    path('add_item/', shelf_view.CreateNewItem.as_view(), name ='add_item'),
+    path('add_genre/', shelf_view.CreateNewGenre.as_view(), name ='add_genre'),
     path('list_users/', shelf_view.UserListView.as_view(), name='user_list'),
+    path('list_genres/', shelf_view.GenreListView.as_view(), name='genre_list'),
     path('', shelf_view.LoginView.as_view(), name="main"),
 ]

@@ -8,8 +8,8 @@ from django.views.generic import FormView, DeleteView, CreateView, ListView
 from django.contrib.auth import get_user_model, login, logout, authenticate
 
 
-from .models import Item, User
-from .forms import LoginForm, CreateUserForm
+from .models import Item, User, Genre
+from .forms import LoginForm, CreateUserForm, CreateNewItem, CreateNewGenre
 
 
 # Create your views here.
@@ -19,6 +19,11 @@ class Library(ListView):
     context_object_name = 'items'
     template_name = 'shelfs/item_list.html'
 
+
+class GenreListView(ListView):
+    model = Genre
+    context_object_name = 'genres'
+    template_name = 'shelfs/genre_list.html'
 
 
 class UserListView(ListView):
@@ -62,5 +67,29 @@ class CreateUserView(CreateView):
         user.is_active = True
         user.set_password(form.cleaned_data['password'])
         user.save()
+        #breakpoint()
+        return super().form_valid(form)
+
+
+class CreateNewItem(CreateView):
+    form_class = CreateNewItem
+    template_name = 'shelfs/add_item.html'
+    success_url = reverse_lazy('main')
+
+    def form_valid(self, form):
+        item = form.save()
+        item.save()
+        #breakpoint()
+        return super().form_valid(form)
+        
+
+class CreateNewGenre(CreateView):
+    form_class = CreateNewGenre
+    template_name = 'shelfs/add_genre.html'
+    success_url = reverse_lazy('genre_list')
+
+    def form_valid(self, form):
+        genre = form.save()
+        genre.save()
         #breakpoint()
         return super().form_valid(form)

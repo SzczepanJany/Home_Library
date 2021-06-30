@@ -1,0 +1,12 @@
+{% extends 'shelfs/index.html' %}
+{% block content %}
+    <ul>
+        {% for genre in genres %}
+            <li>
+                <b><p>{{ genre.name }}: </b><br>
+                {{ genre.description }}</p>
+            </li>
+        {% endfor %}
+        
+    </ul>
+{% endblock %}

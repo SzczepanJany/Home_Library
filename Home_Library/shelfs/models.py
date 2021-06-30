@@ -6,6 +6,8 @@ from datetime import date
 from django.conf import settings
 from django.utils import timezone
 
+from Home_Library.settings import LANGUAGE_CODE
+
 CATHEGORY = (
     (1, 'Book'),
     (2, 'eBook'),
@@ -36,10 +38,13 @@ RATE = (
     (6, 'Briliant'),
 )
 
-
-class Description(models.Model):
-    file = models.FileField()
-    text = models.CharField(max_length=400)
+LANGUAGE=(
+    (1, 'Polish'),
+    (2, 'English'),
+    (3, 'German'),
+    (4, 'French'),
+    (5, 'Other')
+)
 
 
 class User(AbstractUser):
@@ -48,8 +53,9 @@ class User(AbstractUser):
     plc_of_brth = models.CharField(max_length=30, null=True)
     plc_of_dth = models.CharField(max_length=30, null=True)
     nationality = CountryField()
-    description = models.OneToOneField('Description', on_delete=CASCADE, null=True, related_name='users')
-    
+    file = models.FileField(null=True)
+    description = models.CharField(max_length=400,null=True)
+
 
 class UserItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_items', on_delete=CASCADE)
@@ -65,34 +71,46 @@ class Serie(models.Model):
     name = models.CharField(max_length=128)
     world = models.CharField(max_length=128)
     nr_of_volumes = models.IntegerField(default=1)
-    description = models.OneToOneField(Description, on_delete=CASCADE, null=True, related_name='series')
+    file = models.FileField(null=True)
+    description = models.CharField(max_length=400,null=True)
 
 
 class Publisher(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
     city = models.CharField(max_length=128, null=True)
     country = CountryField()
-    description = models.OneToOneField(Description, on_delete=CASCADE, null=True, related_name='publishers')
+    file = models.FileField(null=True)
+    description = models.CharField(max_length=400,null=True)
 
 
 class Rate(models.Model):
     item = models.OneToOneField('Item', related_name='rates', on_delete=CASCADE)
     user = models.OneToOneField(User, on_delete=CASCADE, related_name='rates')
     rate = models.IntegerField(choices=RATE)
-    description = models.OneToOneField(Description, on_delete=CASCADE, null=True, related_name='rates')
+    file = models.FileField(null=True)
+    description = models.CharField(max_length=400,null=True)
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=20)
-    description = models.OneToOneField(Description, on_delete=CASCADE, null=True)
+    name = models.CharField(max_length=20, unique=True)
+    file = models.FileField(null=True)
+    description = models.CharField(max_length=400,null=True)
+
+    @property
+    def sub_name(self):
+        return "{}".format(self.name)
+
+    def __str__(self):
+        return self.sub_name
 
 
 class Item(models.Model):
-    title = models.CharField(max_length=128)
+    title = models.CharField(max_length=128, unique=True)
     user = models.ManyToManyField(User, through=UserItem, related_name='items')
     isbn = models.CharField(max_length=13)
     genre = models.ManyToManyField(Genre)
-    description = models.OneToOneField(Description, on_delete=CASCADE, null=True)
+    file = models.FileField(null=True)
+    description = models.CharField(max_length=400,null=True)
     cathegory = models.IntegerField(choices=CATHEGORY)
     year = models.IntegerField(null=True)
     serie = models.ForeignKey(Serie, on_delete=CASCADE, null=True)
@@ -100,7 +118,7 @@ class Item(models.Model):
     notice = models.CharField(max_length=80, null=True)
     publisher = models.ForeignKey(Publisher, on_delete=CASCADE, null=True)
     edition = models.CharField(max_length=80, null=True)
-    language = CountryField()
+    language = models.IntegerField(choices=LANGUAGE)
 
 
 class Loan(models.Model):
@@ -109,5 +127,6 @@ class Loan(models.Model):
     date_of_loan = models.DateField(default=timezone.now)
     date_of_return = models.DateField(null=True)
     in_loan = models.BooleanField(default=True)
-    description = models.OneToOneField(Description, on_delete=CASCADE, null=True, related_name='loans')
+    file = models.FileField(null=True)
+    description = models.CharField(max_length=400,null=True)
 

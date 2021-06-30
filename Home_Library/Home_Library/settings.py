@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'Home_Library.wsgi.application'
 
 DATABASES = {
     'default': {'HOST': '127.0.0.1',
-        'NAME': 'room_reservation',
+        'NAME': 'home_library',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'USER': 'postgres',
         'PASSWORD': os.environ.get('PASSWORD'),
