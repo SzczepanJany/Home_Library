@@ -16,6 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from shelfs import views as shelf_view
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('main/', shelf_view.Library.as_view(), name="index"),
+    path('logout/', shelf_view.UserLogoutView.as_view(), name ='logout'),
+    path('add_user/', shelf_view.CreateUserView.as_view(), name ='add_user'),
+    path('list_users/', shelf_view.UserListView.as_view(), name='user_list'),
+    path('', shelf_view.LoginView.as_view(), name="main"),
 ]

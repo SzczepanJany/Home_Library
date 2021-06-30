@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'languages',
+    'django_countries',
+    'shelfs',
+    
 ]
 
 AUTH_USER_MODEL = 'shelfs.User'

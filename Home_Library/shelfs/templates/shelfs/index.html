@@ -1,0 +1,33 @@
+<!doctype html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    
+<h1>Biblioteka domowa</h1>
+<p>
+<!-- Menu strony -->
+{% block menu %}
+    {% include "shelfs/menu.html" %}
+{% endblock %}
+</p>
+<p>
+<!-- Tutaj bedzie treść strony -->
+{% block content %}
+    
+{% endblock %}
+</p>
+<!-- Stopka -->
+<p>
+{% block footer %}
+    {% if request.user.is_authenticated %}
+        Użytkownik:{{request.user}}  <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'main' %}">Login</a>
+    {% endif %}
+{% endblock %}
+</p>
+</body>
+</html>
