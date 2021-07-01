@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import fields
 
-from .models import  Genre, Item, User
+from .models import  Genre, Item, User, Serie
 
 
 class LoginForm(forms.Form):
@@ -26,7 +26,7 @@ class CreateUserForm(forms.ModelForm):
             raise ValidationError('Hasła się nie zgadzają')
 
 
-class CreateNewItem(forms.ModelForm):
+class CreateNewItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ['title', 'isbn', 'genre', 'description', 'cathegory', 'year', 'serie', 'volume', 'notice', 'publisher', 'edition', 'language']
@@ -37,8 +37,15 @@ class CreateNewItem(forms.ModelForm):
         # validacja ISBN
         pass
 
-class CreateNewGenre(forms.ModelForm):
+class CreateNewGenreForm(forms.ModelForm):
     class Meta:
         model = Genre
-        fields = ['name', 'description']
-        labels = {'name':'Nazwa', 'description':'Opis'}
+        fields = ['name', 'description', 'file']
+        labels = {'name':'Nazwa', 'description':'Opis', 'file': 'Dodaj zdjęcie'}
+
+
+class CreateNewSerieForm(forms.ModelForm):
+    class Meta:
+        model = Serie
+        fields = ['name', 'world', 'nr_of_volumes', 'description']
+        labels = {'name':'Nazwa','world': 'Świat', 'nr_of_volumes':'Liczba woluminów', 'description':'Opis'}

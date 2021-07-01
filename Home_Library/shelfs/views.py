@@ -8,28 +8,40 @@ from django.views.generic import FormView, DeleteView, CreateView, ListView
 from django.contrib.auth import get_user_model, login, logout, authenticate
 
 
-from .models import Item, User, Genre
-from .forms import LoginForm, CreateUserForm, CreateNewItem, CreateNewGenre
+from .models import Item, Serie, User, Genre
+from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm
 
 
 # Create your views here.
 
-class Library(ListView):
+class LibraryView(ListView):
     model = Item
     context_object_name = 'items'
-    template_name = 'shelfs/item_list.html'
+    template_name = 'shelfs/list_item.html'
 
 
 class GenreListView(ListView):
     model = Genre
     context_object_name = 'genres'
-    template_name = 'shelfs/genre_list.html'
+    template_name = 'shelfs/list_genre.html'
+
+
+class ItemListView(ListView):
+    model = Item
+    context_object_name = 'items'
+    template_name = 'shelfs/list_item.html'
+
+
+class SerieListView(ListView):
+    model = Serie
+    context_object_name = 'series'
+    template_name = 'shelfs/list_serie.html'
 
 
 class UserListView(ListView):
     model = User
     context_object_name = 'users'
-    template_name = 'shelfs/user_list.html'
+    template_name = 'shelfs/list_user.html'
 
 
 class LoginView(View):
@@ -71,8 +83,8 @@ class CreateUserView(CreateView):
         return super().form_valid(form)
 
 
-class CreateNewItem(CreateView):
-    form_class = CreateNewItem
+class CreateNewItemView(CreateView):
+    form_class = CreateNewItemForm
     template_name = 'shelfs/add_item.html'
     success_url = reverse_lazy('main')
 
@@ -83,8 +95,8 @@ class CreateNewItem(CreateView):
         return super().form_valid(form)
         
 
-class CreateNewGenre(CreateView):
-    form_class = CreateNewGenre
+class CreateNewGenreView(CreateView):
+    form_class = CreateNewGenreForm
     template_name = 'shelfs/add_genre.html'
     success_url = reverse_lazy('genre_list')
 
@@ -92,4 +104,15 @@ class CreateNewGenre(CreateView):
         genre = form.save()
         genre.save()
         #breakpoint()
+        return super().form_valid(form)
+
+
+class CreateNewSerieView(CreateView):
+    form_class = CreateNewSerieForm
+    template_name = 'shelfs/add_serie.html'
+    success_url = reverse_lazy('series_list')
+
+    def form_valid(self, form):
+        serie = form.save()
+        serie.save()
         return super().form_valid(form)

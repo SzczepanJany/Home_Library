@@ -22,12 +22,15 @@ from shelfs import views as shelf_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('main/', shelf_view.Library.as_view(), name="index"),
+    path('main/', shelf_view.LibraryView.as_view(), name="index"),
+    path('', shelf_view.LoginView.as_view(), name="main"),
     path('logout/', shelf_view.UserLogoutView.as_view(), name ='logout'),
     path('add_user/', shelf_view.CreateUserView.as_view(), name ='add_user'),
-    path('add_item/', shelf_view.CreateNewItem.as_view(), name ='add_item'),
-    path('add_genre/', shelf_view.CreateNewGenre.as_view(), name ='add_genre'),
-    path('list_users/', shelf_view.UserListView.as_view(), name='user_list'),
-    path('list_genres/', shelf_view.GenreListView.as_view(), name='genre_list'),
-    path('', shelf_view.LoginView.as_view(), name="main"),
+    path('list_users/', shelf_view.UserListView.as_view(), name='list_user'),
+    path('add_item/', shelf_view.CreateNewItemView.as_view(), name ='add_item'),
+    path('list_items/', shelf_view.ItemListView.as_view(), name='list_item'),
+    path('add_genre/', shelf_view.CreateNewGenreView.as_view(), name ='add_genre'),
+    path('list_genres/', shelf_view.GenreListView.as_view(), name='list_genre'),
+    path('add_series/', shelf_view.CreateNewSerieView.as_view(), name ='add_serie'),
+    path('list_series/', shelf_view.SerieListView.as_view(), name='list_serie'),
 ]

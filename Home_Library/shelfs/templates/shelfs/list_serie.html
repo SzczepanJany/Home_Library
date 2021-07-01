@@ -1,0 +1,11 @@
+{% extends 'shelfs/index.html' %}
+{% block content %}
+    <ul>
+        {% for serie in series %}
+            <li>
+                {{ serie.name }}
+            </li>
+        {% endfor %}
+        
+    </ul>
+{% endblock %}
