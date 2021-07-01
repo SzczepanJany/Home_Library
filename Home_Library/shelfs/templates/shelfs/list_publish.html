@@ -1,10 +1,9 @@
 {% extends 'shelfs/index.html' %}
 {% block content %}
     <ul>
-        {% for item in items %}
+        {% for publish in publishers %}
             <li>
-                {{ item.title }}
-                <a href="{% url 'add_rate' %}">Dodaj ocenę</a>
+                {{ publish.name }}
             </li>
         {% endfor %}
         

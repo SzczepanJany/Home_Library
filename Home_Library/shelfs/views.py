@@ -8,8 +8,8 @@ from django.views.generic import FormView, DeleteView, CreateView, ListView
 from django.contrib.auth import get_user_model, login, logout, authenticate
 
 
-from .models import Item, Serie, User, Genre
-from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm
+from .models import Item, Publisher, Serie, User, Genre
+from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm
 
 
 # Create your views here.
@@ -36,6 +36,12 @@ class SerieListView(ListView):
     model = Serie
     context_object_name = 'series'
     template_name = 'shelfs/list_serie.html'
+
+
+class PublisherListView(ListView):
+    model = Publisher
+    context_object_name = 'publishers'
+    template_name = 'shelfs/list_publish.html'
 
 
 class UserListView(ListView):
@@ -115,4 +121,15 @@ class CreateNewSerieView(CreateView):
     def form_valid(self, form):
         serie = form.save()
         serie.save()
+        return super().form_valid(form)
+
+
+class CreateNewPublisherView(CreateView):
+    form_class = CreateNewPublisherForm
+    template_name = 'shelfs/add_publish.html'
+    success_url = reverse_lazy('publisher_list')
+
+    def form_valid(self, form):
+        publisher = form.save()
+        publisher.save()
         return super().form_valid(form)

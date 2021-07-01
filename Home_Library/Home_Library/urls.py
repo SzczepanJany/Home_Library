@@ -33,4 +33,7 @@ urlpatterns = [
     path('list_genres/', shelf_view.GenreListView.as_view(), name='list_genre'),
     path('add_series/', shelf_view.CreateNewSerieView.as_view(), name ='add_serie'),
     path('list_series/', shelf_view.SerieListView.as_view(), name='list_serie'),
+    path('add_publish/', shelf_view.CreateNewPublisherView.as_view(), name ='add_publish'),
+    path('list_publish/', shelf_view.PublisherListView.as_view(), name='list_publish'),
+    #path('add_rate/', shelf_view.CreateNewRateView.as_view(), name ='add_rate'),
 ]

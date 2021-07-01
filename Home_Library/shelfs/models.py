@@ -87,13 +87,11 @@ class Rate(models.Model):
     item = models.OneToOneField('Item', related_name='rates', on_delete=CASCADE)
     user = models.OneToOneField(User, on_delete=CASCADE, related_name='rates')
     rate = models.IntegerField(choices=RATE)
-    file = models.FileField(null=True)
     description = models.CharField(max_length=400,null=True)
 
 
 class Genre(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    file = models.FileField(null=True)
     description = models.CharField(max_length=400,null=True)
 
     @property
