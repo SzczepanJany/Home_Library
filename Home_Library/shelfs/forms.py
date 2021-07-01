@@ -71,3 +71,5 @@ class CreateNewPublisherForm(forms.ModelForm):
 #         model = Rate
 #         fields = ['name', 'city', 'country', 'description']
 #         labels = {'name':'Nazwa','city': "Miasto", 'country':"Kraj", 'description':'Opis'}
+
+

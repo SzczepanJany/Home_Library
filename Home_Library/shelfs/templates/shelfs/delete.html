@@ -1,0 +1,11 @@
+{% extends 'shelfs/index.html' %}
+{% block content %}
+<p>
+    Napewno usunąć {{object}}?
+    <form method="post">{% csrf_token %}
+    
+        <input type="submit" value="Usuń">
+        <a href="/detail_{{url}}/{{object.id}}">Zaniechaj</a>
+    </form>
+</p>
+{% endblock %}

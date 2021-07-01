@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import FormView, DeleteView, CreateView, ListView
+from django.views.generic import FormView, DeleteView, CreateView, ListView, UpdateView, DetailView
 from django.contrib.auth import get_user_model, login, logout, authenticate
 
 
@@ -14,40 +14,120 @@ from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreF
 
 # Create your views here.
 
-class LibraryView(ListView):
-    model = Item
-    context_object_name = 'items'
-    template_name = 'shelfs/list_item.html'
-
 
 class GenreListView(ListView):
+    form_class = CreateNewGenreForm
     model = Genre
-    context_object_name = 'genres'
-    template_name = 'shelfs/list_genre.html'
+    context_object_name = 'items'
+    template_name = 'shelfs/list.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Gatunek: '
+        context['url'] = 'genre'
+        return context
+
+class GenreDetailView(DetailView):
+    model = Genre
+    template_name = 'shelfs/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Gatunek: '
+        context['url'] = 'genre'
+        return context
+
+class SerieDetailView(DetailView):
+    model = Serie
+    template_name = 'shelfs/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Seria: '
+        context['url'] = 'serie'
+        return context
+
+
+class PublisherDetailView(DetailView):
+    model = Publisher
+    template_name = 'shelfs/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Wydawca: '
+        context['url'] = 'publish'
+        return context
+
+
+class SerieDeleteView(DeleteView):
+    template_name = 'shelfs/delete.html'
+    model = Serie
+    context_object_name = 'item'
+    success_url = reverse_lazy('list_serie')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Seria: '
+        context['url'] = 'serie'
+        return context
+
+
+class GenreDeleteView(DeleteView):
+    template_name = 'shelfs/delete.html'
+    model = Genre
+    success_url = reverse_lazy('list_genre')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Gatunek: '
+        context['url'] = 'genre'
+        return context
 
 class ItemListView(ListView):
     model = Item
     context_object_name = 'items'
-    template_name = 'shelfs/list_item.html'
+    template_name = 'shelfs/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Pozycja: '
+        context['url'] = 'item'
+        return context
 
 
 class SerieListView(ListView):
     model = Serie
-    context_object_name = 'series'
-    template_name = 'shelfs/list_serie.html'
+    context_object_name = 'items'
+    template_name = 'shelfs/list.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Seria: '
+        context['url'] = 'serie'
+        return context
 
 
 class PublisherListView(ListView):
     model = Publisher
-    context_object_name = 'publishers'
-    template_name = 'shelfs/list_publish.html'
+    context_object_name = 'items'
+    template_name = 'shelfs/list.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Wydawca: '
+        context['url'] = 'publish'
+        return context
 
 class UserListView(ListView):
     model = User
-    context_object_name = 'users'
-    template_name = 'shelfs/list_user.html'
+    context_object_name = 'items'
+    template_name = 'shelfs/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Użytkownik: '
+        context['url'] = 'user'
+        return context
 
 
 class LoginView(View):
@@ -77,7 +157,7 @@ class CreateUserView(CreateView):
     form_class = CreateUserForm
     #fields = ['username', 'password', 'password', 'email']
     #model = User
-    template_name = 'shelfs/add_user.html'
+    template_name = 'shelfs/add.html'
     success_url = reverse_lazy('main')
 
     def form_valid(self, form):
@@ -91,7 +171,7 @@ class CreateUserView(CreateView):
 
 class CreateNewItemView(CreateView):
     form_class = CreateNewItemForm
-    template_name = 'shelfs/add_item.html'
+    template_name = 'shelfs/add.html'
     success_url = reverse_lazy('main')
 
     def form_valid(self, form):
@@ -103,8 +183,8 @@ class CreateNewItemView(CreateView):
 
 class CreateNewGenreView(CreateView):
     form_class = CreateNewGenreForm
-    template_name = 'shelfs/add_genre.html'
-    success_url = reverse_lazy('genre_list')
+    template_name = 'shelfs/add.html'
+    success_url = reverse_lazy('list_genre')
 
     def form_valid(self, form):
         genre = form.save()
@@ -115,8 +195,8 @@ class CreateNewGenreView(CreateView):
 
 class CreateNewSerieView(CreateView):
     form_class = CreateNewSerieForm
-    template_name = 'shelfs/add_serie.html'
-    success_url = reverse_lazy('series_list')
+    template_name = 'shelfs/add.html'
+    success_url = reverse_lazy('list_serie')
 
     def form_valid(self, form):
         serie = form.save()
@@ -126,10 +206,38 @@ class CreateNewSerieView(CreateView):
 
 class CreateNewPublisherView(CreateView):
     form_class = CreateNewPublisherForm
-    template_name = 'shelfs/add_publish.html'
-    success_url = reverse_lazy('publisher_list')
+    template_name = 'shelfs/add.html'
+    success_url = reverse_lazy('list_publish')
 
     def form_valid(self, form):
         publisher = form.save()
         publisher.save()
         return super().form_valid(form)
+
+
+class EditItemView(UpdateView):
+    form_class = CreateNewItemForm
+    template_name = 'shelfs/edit.html'
+    success_url = reverse_lazy('main')
+    model = Item
+
+
+class EditGenreView(UpdateView):
+    form_class = CreateNewGenreForm
+    template_name = 'shelfs/edit.html'
+    success_url = reverse_lazy('list_genre')
+    model = Genre
+
+
+class EditPublisherView(UpdateView):
+    form_class = CreateNewPublisherForm
+    template_name = 'shelfs/edit.html'
+    success_url = reverse_lazy('list_publish')
+    model = Publisher
+
+
+class EditSerieView(UpdateView):
+    form_class = CreateNewSerieForm
+    template_name = 'shelfs/edit.html'
+    success_url = reverse_lazy('list_serie')
+    model = Serie

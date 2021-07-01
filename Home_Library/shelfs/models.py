@@ -53,8 +53,15 @@ class User(AbstractUser):
     plc_of_brth = models.CharField(max_length=30, null=True)
     plc_of_dth = models.CharField(max_length=30, null=True)
     nationality = CountryField()
-    file = models.FileField(null=True)
+    file = models.FileField(upload_to='photos/users/%Y/%m/%d/', null=True, blank=True)
     description = models.CharField(max_length=400,null=True)
+
+    @property
+    def sub_name(self):
+        return "{}".format(self.username)
+
+    def __str__(self):
+        return self.sub_name
 
 
 class UserItem(models.Model):
@@ -71,16 +78,29 @@ class Serie(models.Model):
     name = models.CharField(max_length=128)
     world = models.CharField(max_length=128)
     nr_of_volumes = models.IntegerField(default=1)
-    file = models.FileField(null=True)
+    file = models.FileField(upload_to='photos/series/%Y/%m/%d/', null=True, blank=True)
     description = models.CharField(max_length=400,null=True)
 
+    @property
+    def sub_name(self):
+        return "{}".format(self.name)
+
+    def __str__(self):
+        return self.sub_name
 
 class Publisher(models.Model):
     name = models.CharField(max_length=128, unique=True)
     city = models.CharField(max_length=128, null=True)
     country = CountryField()
-    file = models.FileField(null=True)
+    file = models.FileField(upload_to='photos/publishers/%Y/%m/%d/', null=True, blank=True)
     description = models.CharField(max_length=400,null=True)
+
+    @property
+    def sub_name(self):
+        return "{}".format(self.name)
+
+    def __str__(self):
+        return self.sub_name
 
 
 class Rate(models.Model):
@@ -107,7 +127,7 @@ class Item(models.Model):
     user = models.ManyToManyField(User, through=UserItem, related_name='items')
     isbn = models.CharField(max_length=13)
     genre = models.ManyToManyField(Genre)
-    file = models.FileField(null=True)
+    file = models.FileField(upload_to='photos/items/%Y/%m/%d/', null=True, blank=True)
     description = models.CharField(max_length=400,null=True)
     cathegory = models.IntegerField(choices=CATHEGORY)
     year = models.IntegerField(null=True)
@@ -125,6 +145,6 @@ class Loan(models.Model):
     date_of_loan = models.DateField(default=timezone.now)
     date_of_return = models.DateField(null=True)
     in_loan = models.BooleanField(default=True)
-    file = models.FileField(null=True)
+    file = models.FileField(upload_to='photos/loans/%Y/%m/%d/', null=True, blank=True)
     description = models.CharField(max_length=400,null=True)
 

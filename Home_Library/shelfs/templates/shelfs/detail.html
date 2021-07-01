@@ -1,0 +1,12 @@
+{% extends 'shelfs/index.html' %}
+{% block content %}
+<h1>{{ object.headline }}</h1>
+<p>{{ object.content }}</p>
+<p>
+<b>{{object.name}}</b>
+
+<a href="/edit_{{url}}/{{object.id}}">Edytuj</a>
+<a href="/delete_{{url}}/{{object.id}}">Usuń</a><br>
+</p>
+
+{% endblock %}

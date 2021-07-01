@@ -1,0 +1,14 @@
+{% extends 'shelfs/index.html' %}
+{% block content %}
+    <ul>
+        {% for item in items %}
+            
+                <p>
+                    <li>{{descr}} <a href="/detail_{{url}}/{{item.id}}">{{item}}</a>
+                    
+                </p>
+            
+        {% endfor %}
+        
+    </ul>
+{% endblock %}
