@@ -38,8 +38,8 @@ class CreateNewItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ['title', 'isbn', 'genre', 'description','file', 'cathegory', 'year', 'serie', 'volume', 'notice', 'publisher', 'edition', 'language']
-        labels = {'title':'Nazwa', 'genre':'Gatunek', 'description':'Opis','file':'Okładka', 'cathegory':'Categoria', 'year':'Rok', 'serie':'Seria', 'volume':'Część', 'notice':'Uwagi', 'publisher':'Wydawca', 'edition':'Edycja', 'language':'Język'}
-        widgets = {"genre" : forms.Select()} 
+        labels = {'title':'Nazwa', 'genre':'Gatunek', 'description':'Opis','file':'Okładka', 'cathegory':'Categoria', 'year':'Rok', 'serie':'Seria', 'volume':'Część', 'notice':'Uwagi', 'publisher':'Wydawca', 'edition':'Wydanie', 'language':'Język'}
+        #widgets = {"genre" : forms.ModelChoiceField(queryset=Genre.objects.all(), to_field_name="name")} 
         
     def clean(self):
         # validacja ISBN
@@ -66,10 +66,10 @@ class CreateNewPublisherForm(forms.ModelForm):
         labels = {'name':'Nazwa','city': "Miasto", 'country':"Kraj", 'description':'Opis', 'file':'Dodaj zdjęcie'}
 
 
-# class CreateNewRateForm(forms.ModelForm):
-#     class Meta:
-#         model = Rate
-#         fields = ['name', 'city', 'country', 'description']
-#         labels = {'name':'Nazwa','city': "Miasto", 'country':"Kraj", 'description':'Opis'}
+class CreateNewRateForm(forms.ModelForm):
+    class Meta:
+        model = Rate
+        fields = ['rate', 'description']
+        labels = {'rate':'Ocena', 'description':'Opis'}
 
 

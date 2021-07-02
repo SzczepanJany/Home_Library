@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model, login, logout, authenticate
 
 
 from .models import Item, Publisher, Serie, User, Genre
-from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm
+from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm
 
 
 # Create your views here.
@@ -59,6 +59,54 @@ class PublisherDetailView(DetailView):
         return context
 
 
+class ItemDetailView(DetailView):
+    model = Item
+    template_name = 'shelfs/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Przedmiot: '
+        context['url'] = 'item'
+        return context
+
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'shelfs/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Użytkownik: '
+        context['url'] = 'user'
+        return context
+
+
+class PublisherDeleteView(DeleteView):
+    template_name = 'shelfs/delete.html'
+    model = Publisher
+    context_object_name = 'item'
+    success_url = reverse_lazy('list_serie')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Wydawca: '
+        context['url'] = 'publish'
+        return context
+
+
+class UserDeleteView(DeleteView):
+    template_name = 'shelfs/delete.html'
+    model = User
+    context_object_name = 'item'
+    success_url = reverse_lazy('list_user')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Użytkownik: '
+        context['url'] = 'user'
+        return context
+
+
 class SerieDeleteView(DeleteView):
     template_name = 'shelfs/delete.html'
     model = Serie
@@ -82,6 +130,19 @@ class GenreDeleteView(DeleteView):
         context['descr'] = 'Gatunek: '
         context['url'] = 'genre'
         return context
+
+
+class ItemDeleteView(DeleteView):
+    template_name = 'shelfs/delete.html'
+    model = Item
+    success_url = reverse_lazy('index')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Pozycja: '
+        context['url'] = 'item'
+        return context
+
 
 class ItemListView(ListView):
     model = Item
@@ -140,7 +201,7 @@ class LoginView(View):
             user = authenticate(username = form.cleaned_data['username'], password = form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
-                return redirect('/main/')
+                return redirect('/list_items/')
             else:
                 return render(request, 'shelfs/main.html', {'form': form})
         else:
@@ -150,15 +211,13 @@ class LoginView(View):
 class UserLogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect("main")
+        return redirect("index")
 
 
 class CreateUserView(CreateView):
     form_class = CreateUserForm
-    #fields = ['username', 'password', 'password', 'email']
-    #model = User
     template_name = 'shelfs/add.html'
-    success_url = reverse_lazy('main')
+    success_url = reverse_lazy('list_user')
 
     def form_valid(self, form):
         user = form.save()
@@ -172,7 +231,7 @@ class CreateUserView(CreateView):
 class CreateNewItemView(CreateView):
     form_class = CreateNewItemForm
     template_name = 'shelfs/add.html'
-    success_url = reverse_lazy('main')
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         item = form.save()
@@ -215,10 +274,27 @@ class CreateNewPublisherView(CreateView):
         return super().form_valid(form)
 
 
+class CreateNewRateView(CreateView):
+    form_class = CreateNewRateForm
+    template_name = 'shelfs/add.html'
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        
+        item = Item.objects.get(id=self.kwargs.get('pk'))
+        form.instance.item = item
+        user = User.objects.get(id=self.request.user.id)
+        
+        form.instance.user = user
+        rate = form.save()
+        rate.save()
+        return super().form_valid(form)
+
+
 class EditItemView(UpdateView):
     form_class = CreateNewItemForm
     template_name = 'shelfs/edit.html'
-    success_url = reverse_lazy('main')
+    success_url = reverse_lazy('index')
     model = Item
 
 
@@ -241,3 +317,10 @@ class EditSerieView(UpdateView):
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_serie')
     model = Serie
+
+
+class EditUserView(UpdateView):
+    form_class = CreateUserForm
+    template_name = 'shelfs/edit.html'
+    success_url = reverse_lazy('list_user')
+    model = User

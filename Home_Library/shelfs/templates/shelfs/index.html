@@ -23,7 +23,7 @@
 <p>
 {% block footer %}
     {% if request.user.is_authenticated %}
-        Użytkownik:{{request.user}}  <a href="{% url 'logout' %}">Logout</a>
+        Użytkownik: {{request.user}}  <a href="{% url 'logout' %}">Logout</a>
         <p><a href="{% url 'list_user' %}">Użytkownicy</a>
             <a href="{% url 'add_user' %}">Dodaj użytkownika</a>
             <a href="{% url 'logout' %}">Logout</a></p>

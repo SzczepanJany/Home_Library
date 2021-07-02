@@ -3,8 +3,15 @@
 <h1>{{ object.headline }}</h1>
 <p>{{ object.content }}</p>
 <p>
-<b>{{object.name}}</b>
-
+<p><b>{{object}}</b><br>
+    {{object.description}}
+{% if url == 'item' %}
+    <a href="/add_rate/{{object.id}}">Dodaj ocenę</a>
+    {% for rat in object.rates.all %}
+        <li>Ocena: {{rat.rate}} - {{rat.user}}: {{rat.description}}</li>
+    {% endfor %}
+{% endif %}
+</p>
 <a href="/edit_{{url}}/{{object.id}}">Edytuj</a>
 <a href="/delete_{{url}}/{{object.id}}">Usuń</a><br>
 </p>
