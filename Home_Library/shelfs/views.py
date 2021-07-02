@@ -56,6 +56,7 @@ class PublisherDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['descr'] = 'Wydawca: '
         context['url'] = 'publish'
+        context['all_fields'] = Publisher._meta.get_fields()
         return context
 
 
