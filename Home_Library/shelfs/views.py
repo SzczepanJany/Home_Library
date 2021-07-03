@@ -1,4 +1,4 @@
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model, login, logout, authenticate
 
 
 from .models import Author, Item, Publisher, Serie, User, Genre, UserItem
-from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm, CreateNewAuthorForm, EditItemForm
+from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm, CreateNewAuthorForm
 
 
 # Create your views here.
@@ -274,6 +274,8 @@ class CreateNewItemView(CreateView):
         user = self.request.user
         item = form.save()
         user_item = UserItem.objects.create(user=user, item=item)
+        user_item.favourite = form.cleaned_data['is_favourite']
+        user_item.nr_of_copies = form.cleaned_data['nr_of_copies']
         #breakpoint()
         return super().form_valid(form)
         
@@ -342,7 +344,7 @@ class CreateNewRateView(CreateView):
 
 
 class EditItemView(UpdateView):
-    form_class = EditItemForm
+    form_class = CreateNewItemForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('index')
     model = Item
@@ -350,14 +352,24 @@ class EditItemView(UpdateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         #does not exist
-        us_it = UserItem.objects.get(item=self.object, user=self.request.user)
+        user = self.request.user
+
+        try:
+            us_it = UserItem.objects.get(item=self.object, user=self.request.user)
+        except ObjectDoesNotExist:
+            user_item = UserItem.objects.create(item=self.object, user=self.request.user)
         us_it.favourite = form.cleaned_data['is_favourite']
+        us_it.nr_of_copies = form.cleaned_data['nr_of_copies']
         us_it.save()
         return response
 
     def get_initial(self):
         init_da = super().get_initial()
-        init_da['is_fauvorite'] = UserItem.objects.get(item=self.object, user=self.request.user).fauvorite
+        try:
+            init_da['is_favourite'] = UserItem.objects.get(item=self.object, user=self.request.user).favourite
+        except ObjectDoesNotExist:
+            user_item = UserItem.objects.create(item=self.object, user=self.request.user)
+        init_da['nr_of_copies'] = UserItem.objects.get(item=self.object, user=self.request.user).nr_of_copies
         return init_da
 
 

@@ -35,6 +35,8 @@ class CreateUserForm(forms.ModelForm):
 
 
 class CreateNewItemForm(forms.ModelForm):
+    is_favourite = forms.BooleanField(initial=False, label='Do ulubionych')
+    nr_of_copies = forms.IntegerField(label='Liczba posiadanych kopii')
     class Meta:
         model = Item
         fields = ['title', 'isbn', 'genre', 'description','file', 'cathegory', 'year', 'serie', 'volume', 'notice', 'publisher', 'edition', 'language']
@@ -82,6 +84,3 @@ class CreateNewAuthorForm(forms.ModelForm):
         year_range = tuple([i for i in range(cur_year - 2120, cur_year)])
         widgets = {'birthday':widgets.SelectDateWidget(years=year_range),'death':widgets.SelectDateWidget(years=year_range)}
 
-
-class EditItemForm(CreateNewItemForm):
-    is_fauvorite = forms.BooleanField(initial=False)
