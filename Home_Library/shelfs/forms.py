@@ -6,7 +6,7 @@ import datetime
 
 from django.forms.fields import DateField
 
-from .models import  Genre, Item, Publisher, Rate, User, Serie
+from .models import  Author, Genre, Item, Publisher, Rate, User, Serie
 
 
 class LoginForm(forms.Form):
@@ -20,8 +20,8 @@ class CreateUserForm(forms.ModelForm):
     password2 = forms.CharField(max_length=16,label='Powtórz hasło', widget=forms.PasswordInput)
     class Meta:
         model = User
-        fields = ['username', 'password', 'email', 'birthday', 'description','file']
-        labels = {'email':'email','birthday':'Data ur.' , 'description':'Opis','file':'Zdjęcie'}
+        fields = ['username', 'password','name', 'surname', 'email', 'birthday', 'description','file']
+        labels = {'email':'email','birthday':'Data ur.', 'name':'Imię', 'surname':'Nazwisko' , 'description':'Opis','file':'Zdjęcie'}
         cur_year = datetime.datetime.today().year
         year_range = tuple([i for i in range(cur_year - 120, cur_year-6)])
         widgets = {'birthday':widgets.SelectDateWidget(years=year_range)}
@@ -73,3 +73,11 @@ class CreateNewRateForm(forms.ModelForm):
         labels = {'rate':'Ocena', 'description':'Opis'}
 
 
+class CreateNewAuthorForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = ['name', 'surname','birthday','is_dead','death','plc_of_brth','plc_of_dth','nationality', 'description','file']
+        labels = {'birthday':'Data ur.','is_dead':'Zmarły(a)','death':'Data śm.','plc_of_brth':'Miejsce ur.','plc_of_dth':'Miejsce śm.','nationality':'Narodowość', 'name':'Imię', 'surname':'Nazwisko' , 'description':'Opis','file':'Zdjęcie'}
+        cur_year = datetime.datetime.today().year
+        year_range = tuple([i for i in range(cur_year - 2120, cur_year)])
+        widgets = {'birthday':widgets.SelectDateWidget(years=year_range),'death':widgets.SelectDateWidget(years=year_range)}

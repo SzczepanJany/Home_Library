@@ -8,8 +8,8 @@ from django.views.generic import FormView, DeleteView, CreateView, ListView, Upd
 from django.contrib.auth import get_user_model, login, logout, authenticate
 
 
-from .models import Item, Publisher, Serie, User, Genre
-from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm
+from .models import Author, Item, Publisher, Serie, User, Genre
+from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm, CreateNewAuthorForm
 
 
 # Create your views here.
@@ -82,6 +82,17 @@ class UserDetailView(DetailView):
         return context
 
 
+class AuthorDetailView(DetailView):
+    model = Author
+    template_name = 'shelfs/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Autor: '
+        context['url'] = 'authr'
+        return context
+
+
 class PublisherDeleteView(DeleteView):
     template_name = 'shelfs/delete.html'
     model = Publisher
@@ -105,6 +116,19 @@ class UserDeleteView(DeleteView):
         context = super().get_context_data(**kwargs)
         context['descr'] = 'Użytkownik: '
         context['url'] = 'user'
+        return context
+
+
+class AuthorDeleteView(DeleteView):
+    template_name = 'shelfs/delete.html'
+    model = Author
+    context_object_name = 'item'
+    success_url = reverse_lazy('list_user')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Autor: '
+        context['url'] = 'authr'
         return context
 
 
@@ -154,6 +178,18 @@ class ItemListView(ListView):
         context = super().get_context_data(**kwargs)
         context['descr'] = 'Pozycja: '
         context['url'] = 'item'
+        return context
+
+
+class AuthorListView(ListView):
+    model = Author
+    context_object_name = 'items'
+    template_name = 'shelfs/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['descr'] = 'Autor: '
+        context['url'] = 'authr'
         return context
 
 
@@ -235,11 +271,26 @@ class CreateNewItemView(CreateView):
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
+        user = User.objects.get(id=self.request.user.id)
+        user.set(['is_owner'])
+        form.instance.user = user
         item = form.save()
         item.save()
         #breakpoint()
         return super().form_valid(form)
         
+
+class CreateNewAuthorView(CreateView):
+    form_class = CreateNewAuthorForm
+    template_name = 'shelfs/add.html'
+    success_url = reverse_lazy('list_authr')
+
+    def form_valid(self, form):
+        item = form.save()
+        item.save()
+        #breakpoint()
+        return super().form_valid(form)
+
 
 class CreateNewGenreView(CreateView):
     form_class = CreateNewGenreForm
@@ -296,6 +347,13 @@ class EditItemView(UpdateView):
     form_class = CreateNewItemForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('index')
+    model = Item
+
+
+class EditAuthorView(UpdateView):
+    form_class = CreateNewAuthorForm
+    template_name = 'shelfs/edit.html'
+    success_url = reverse_lazy('list_authr')
     model = Item
 
 

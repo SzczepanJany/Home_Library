@@ -49,11 +49,9 @@ LANGUAGE=(
 
 
 class User(AbstractUser):
+    name = models.CharField(max_length=30, null=True)
+    surname = models.CharField(max_length=30, null=True)
     birthday = models.DateField(null=True)
-    death = models.DateField(null=True)
-    plc_of_brth = models.CharField(max_length=30, null=True)
-    plc_of_dth = models.CharField(max_length=30, null=True)
-    nationality = CountryField()
     file = models.FileField(upload_to='photos/users/%Y/%m/%d/', null=True, blank=True)
     description = models.CharField(max_length=400,null=True, blank=True)
 
@@ -68,7 +66,6 @@ class User(AbstractUser):
 class UserItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_items', on_delete=CASCADE)
     item = models.ForeignKey('Item', related_name='user_items', on_delete=CASCADE)
-    is_author = models.BooleanField(default=False)
     is_owner = models.BooleanField(default=False)
     is_editor = models.BooleanField(default=False)
     favourite = models.BooleanField(default=False)
@@ -122,9 +119,29 @@ class Genre(models.Model):
     def __str__(self):
         return self.sub_name
 
+class Author(models.Model):
+    name = models.CharField(max_length=30, null=True)
+    surname = models.CharField(max_length=30, null=True)
+    birthday = models.DateField(null=True)
+    is_dead = models.BooleanField(default=False)
+    death = models.DateField(null=True)
+    plc_of_brth = models.CharField(max_length=30, null=True)
+    plc_of_dth = models.CharField(max_length=30, null=True)
+    nationality = CountryField()
+    file = models.FileField(upload_to='photos/users/%Y/%m/%d/', null=True, blank=True)
+    description = models.CharField(max_length=400,null=True, blank=True)
+
+    @property
+    def sub_name(self):
+        return "{} {}".format(self.name, self.surname)
+
+    def __str__(self):
+        return self.sub_name
+
 
 class Item(models.Model):
     title = models.CharField(max_length=128, unique=True)
+    author = models.ManyToManyField(Author)
     user = models.ManyToManyField(User, through=UserItem, related_name='items')
     isbn = models.CharField(max_length=13)
     genre = models.ManyToManyField(Genre)

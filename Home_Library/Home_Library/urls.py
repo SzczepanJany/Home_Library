@@ -49,6 +49,11 @@ urlpatterns = [
     path('edit_publish/<int:pk>/', shelf_view.EditPublisherView.as_view(), name='edit_publish'),
     path('detail_publish/<int:pk>/', shelf_view.PublisherDetailView.as_view(), name='detail_publish'),
     path('delete_publish/<int:pk>/', shelf_view.PublisherDeleteView.as_view(), name='delete_publish'),
+    path('add_authr/', shelf_view.CreateNewAuthorView.as_view(), name ='add_authr'),
+    path('list_authr/', shelf_view.AuthorListView.as_view(), name='list_authr'),
+    path('edit_authr/<int:pk>/', shelf_view.EditAuthorView.as_view(), name='edit_authr'),
+    path('detail_authr/<int:pk>/', shelf_view.AuthorDetailView.as_view(), name='detail_authr'),
+    path('delete_authr/<int:pk>/', shelf_view.AuthorDeleteView.as_view(), name='delete_authr'),
     path('add_rate/<int:pk>/', shelf_view.CreateNewRateView.as_view(), name ='add_rate'),
     #path('add_rate/', shelf_view.CreateNewRateView.as_view(), name ='add_rate'),
 ]
