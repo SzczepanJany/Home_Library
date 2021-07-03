@@ -81,3 +81,7 @@ class CreateNewAuthorForm(forms.ModelForm):
         cur_year = datetime.datetime.today().year
         year_range = tuple([i for i in range(cur_year - 2120, cur_year)])
         widgets = {'birthday':widgets.SelectDateWidget(years=year_range),'death':widgets.SelectDateWidget(years=year_range)}
+
+
+class EditItemForm(CreateNewItemForm):
+    is_fauvorite = forms.BooleanField(initial=False)

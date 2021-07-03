@@ -8,8 +8,8 @@ from django.views.generic import FormView, DeleteView, CreateView, ListView, Upd
 from django.contrib.auth import get_user_model, login, logout, authenticate
 
 
-from .models import Author, Item, Publisher, Serie, User, Genre
-from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm, CreateNewAuthorForm
+from .models import Author, Item, Publisher, Serie, User, Genre, UserItem
+from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm, CreateNewAuthorForm, EditItemForm
 
 
 # Create your views here.
@@ -271,11 +271,9 @@ class CreateNewItemView(CreateView):
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
-        user = User.objects.get(id=self.request.user.id)
-        user.set(['is_owner'])
-        form.instance.user = user
+        user = self.request.user
         item = form.save()
-        item.save()
+        user_item = UserItem.objects.create(user=user, item=item)
         #breakpoint()
         return super().form_valid(form)
         
@@ -344,17 +342,30 @@ class CreateNewRateView(CreateView):
 
 
 class EditItemView(UpdateView):
-    form_class = CreateNewItemForm
+    form_class = EditItemForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('index')
     model = Item
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        #does not exist
+        us_it = UserItem.objects.get(item=self.object, user=self.request.user)
+        us_it.favourite = form.cleaned_data['is_favourite']
+        us_it.save()
+        return response
+
+    def get_initial(self):
+        init_da = super().get_initial()
+        init_da['is_fauvorite'] = UserItem.objects.get(item=self.object, user=self.request.user).fauvorite
+        return init_da
 
 
 class EditAuthorView(UpdateView):
     form_class = CreateNewAuthorForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_authr')
-    model = Item
+    model = Author
 
 
 class EditGenreView(UpdateView):
