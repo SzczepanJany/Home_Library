@@ -6,16 +6,19 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import FormView, DeleteView, CreateView, ListView, UpdateView, DetailView
 from django.contrib.auth import get_user_model, login, logout, authenticate
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
-from .models import Author, Item, Publisher, Serie, User, Genre, UserItem
-from .forms import LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm, CreateNewAuthorForm
+from .models import Author, Item, Publisher, Serie, User, Genre, UserItem, Loans
+from .forms import CreateNewLentForm, CreateNewLoanForm, LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm, CreateNewAuthorForm
 
 
 # Create your views here.
 
 
-class GenreListView(ListView):
+class GenreListView(PermissionRequiredMixin, ListView):
+    permission_required = 'shelfs.list_view'
+    login_url = reverse_lazy('main')
     form_class = CreateNewGenreForm
     model = Genre
     context_object_name = 'items'
@@ -27,7 +30,9 @@ class GenreListView(ListView):
         context['url'] = 'genre'
         return context
 
-class GenreDetailView(DetailView):
+class GenreDetailView(PermissionRequiredMixin,DetailView):
+    permission_required = 'shelfs.list_view'
+    login_url = reverse_lazy('main')
     model = Genre
     template_name = 'shelfs/detail.html'
 
@@ -37,7 +42,9 @@ class GenreDetailView(DetailView):
         context['url'] = 'genre'
         return context
 
-class SerieDetailView(DetailView):
+class SerieDetailView(PermissionRequiredMixin,DetailView):
+    permission_required = 'shelfs.list_view'
+    login_url = reverse_lazy('main')
     model = Serie
     template_name = 'shelfs/detail.html'
 
@@ -48,7 +55,9 @@ class SerieDetailView(DetailView):
         return context
 
 
-class PublisherDetailView(DetailView):
+class PublisherDetailView(PermissionRequiredMixin,DetailView):
+    permission_required = 'shelfs.list_view'
+    login_url = reverse_lazy('main')
     model = Publisher
     template_name = 'shelfs/detail.html'
 
@@ -60,7 +69,9 @@ class PublisherDetailView(DetailView):
         return context
 
 
-class ItemDetailView(DetailView):
+class ItemDetailView(PermissionRequiredMixin,DetailView):
+    permission_required = 'shelfs.list_view'
+    login_url = reverse_lazy('main')
     model = Item
     template_name = 'shelfs/detail.html'
 
@@ -71,7 +82,9 @@ class ItemDetailView(DetailView):
         return context
 
 
-class UserDetailView(DetailView):
+class UserDetailView(PermissionRequiredMixin,DetailView):
+    permission_required = 'shelfs.users_view'
+    login_url = reverse_lazy('main')
     model = User
     template_name = 'shelfs/detail.html'
 
@@ -82,7 +95,9 @@ class UserDetailView(DetailView):
         return context
 
 
-class AuthorDetailView(DetailView):
+class AuthorDetailView(PermissionRequiredMixin,DetailView):
+    permission_required = 'shelfs.list_view'
+    login_url = reverse_lazy('main')
     model = Author
     template_name = 'shelfs/detail.html'
 
@@ -93,7 +108,8 @@ class AuthorDetailView(DetailView):
         return context
 
 
-class PublisherDeleteView(DeleteView):
+class PublisherDeleteView(PermissionRequiredMixin,DeleteView):
+    permission_required = 'shelfs.delet'
     template_name = 'shelfs/delete.html'
     model = Publisher
     context_object_name = 'item'
@@ -106,7 +122,8 @@ class PublisherDeleteView(DeleteView):
         return context
 
 
-class UserDeleteView(DeleteView):
+class UserDeleteView(PermissionRequiredMixin,DeleteView):
+    permission_required = 'shelfs.users_edit'
     template_name = 'shelfs/delete.html'
     model = User
     context_object_name = 'item'
@@ -119,7 +136,8 @@ class UserDeleteView(DeleteView):
         return context
 
 
-class AuthorDeleteView(DeleteView):
+class AuthorDeleteView(PermissionRequiredMixin,DeleteView):
+    permission_required = 'shelfs.delet'
     template_name = 'shelfs/delete.html'
     model = Author
     context_object_name = 'item'
@@ -132,7 +150,8 @@ class AuthorDeleteView(DeleteView):
         return context
 
 
-class SerieDeleteView(DeleteView):
+class SerieDeleteView(PermissionRequiredMixin,DeleteView):
+    permission_required = 'shelfs.delet'
     template_name = 'shelfs/delete.html'
     model = Serie
     context_object_name = 'item'
@@ -145,7 +164,8 @@ class SerieDeleteView(DeleteView):
         return context
 
 
-class GenreDeleteView(DeleteView):
+class GenreDeleteView(PermissionRequiredMixin,DeleteView):
+    permission_required = 'shelfs.delet'
     template_name = 'shelfs/delete.html'
     model = Genre
     success_url = reverse_lazy('list_genre')
@@ -157,7 +177,8 @@ class GenreDeleteView(DeleteView):
         return context
 
 
-class ItemDeleteView(DeleteView):
+class ItemDeleteView(PermissionRequiredMixin,DeleteView):
+    permission_required = 'shelfs.delet'
     template_name = 'shelfs/delete.html'
     model = Item
     success_url = reverse_lazy('index')
@@ -169,7 +190,9 @@ class ItemDeleteView(DeleteView):
         return context
 
 
-class ItemListView(ListView):
+class ItemListView(PermissionRequiredMixin,ListView):
+    permission_required = 'shelfs.list_view'
+    login_url = reverse_lazy('main')
     model = Item
     context_object_name = 'items'
     template_name = 'shelfs/list.html'
@@ -181,7 +204,9 @@ class ItemListView(ListView):
         return context
 
 
-class AuthorListView(ListView):
+class AuthorListView(PermissionRequiredMixin,ListView):
+    permission_required = 'shelfs.listw'
+    login_url = reverse_lazy('main')
     model = Author
     context_object_name = 'items'
     template_name = 'shelfs/list.html'
@@ -193,7 +218,9 @@ class AuthorListView(ListView):
         return context
 
 
-class SerieListView(ListView):
+class SerieListView(PermissionRequiredMixin,ListView):
+    permission_required = 'shelfs.list_view'
+    login_url = reverse_lazy('main')
     model = Serie
     context_object_name = 'items'
     template_name = 'shelfs/list.html'
@@ -205,7 +232,9 @@ class SerieListView(ListView):
         return context
 
 
-class PublisherListView(ListView):
+class PublisherListView(PermissionRequiredMixin,ListView):
+    permission_required = 'shelfs.list_view'
+    login_url = reverse_lazy('main')
     model = Publisher
     context_object_name = 'items'
     template_name = 'shelfs/list.html'
@@ -216,7 +245,9 @@ class PublisherListView(ListView):
         context['url'] = 'publish'
         return context
 
-class UserListView(ListView):
+class UserListView(PermissionRequiredMixin,ListView):
+    permission_required = 'shelfs.users_view'
+    login_url = reverse_lazy('main')
     model = User
     context_object_name = 'items'
     template_name = 'shelfs/list.html'
@@ -251,7 +282,9 @@ class UserLogoutView(View):
         return redirect("index")
 
 
-class CreateUserView(CreateView):
+class CreateUserView(PermissionRequiredMixin,CreateView):
+    permission_required = 'shelfs.users_edit'
+    login_url = reverse_lazy('main')
     form_class = CreateUserForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('list_user')
@@ -265,7 +298,8 @@ class CreateUserView(CreateView):
         return super().form_valid(form)
 
 
-class CreateNewItemView(CreateView):
+class CreateNewItemView(PermissionRequiredMixin,CreateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewItemForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
@@ -280,7 +314,8 @@ class CreateNewItemView(CreateView):
         return super().form_valid(form)
         
 
-class CreateNewAuthorView(CreateView):
+class CreateNewAuthorView(PermissionRequiredMixin,CreateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewAuthorForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('list_authr')
@@ -292,7 +327,8 @@ class CreateNewAuthorView(CreateView):
         return super().form_valid(form)
 
 
-class CreateNewGenreView(CreateView):
+class CreateNewGenreView(PermissionRequiredMixin,CreateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewGenreForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('list_genre')
@@ -304,7 +340,8 @@ class CreateNewGenreView(CreateView):
         return super().form_valid(form)
 
 
-class CreateNewSerieView(CreateView):
+class CreateNewSerieView(PermissionRequiredMixin,CreateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewSerieForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('list_serie')
@@ -315,7 +352,8 @@ class CreateNewSerieView(CreateView):
         return super().form_valid(form)
 
 
-class CreateNewPublisherView(CreateView):
+class CreateNewPublisherView(PermissionRequiredMixin,CreateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewPublisherForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('list_publish')
@@ -326,7 +364,8 @@ class CreateNewPublisherView(CreateView):
         return super().form_valid(form)
 
 
-class CreateNewRateView(CreateView):
+class CreateNewRateView(PermissionRequiredMixin,CreateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewRateForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
@@ -343,7 +382,8 @@ class CreateNewRateView(CreateView):
         return super().form_valid(form)
 
 
-class EditItemView(UpdateView):
+class EditItemView(PermissionRequiredMixin,UpdateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewItemForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('index')
@@ -373,36 +413,69 @@ class EditItemView(UpdateView):
         return init_da
 
 
-class EditAuthorView(UpdateView):
+class EditAuthorView(PermissionRequiredMixin,UpdateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewAuthorForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_authr')
     model = Author
 
 
-class EditGenreView(UpdateView):
+class EditGenreView(PermissionRequiredMixin,UpdateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewGenreForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_genre')
     model = Genre
 
 
-class EditPublisherView(UpdateView):
+class EditPublisherView(PermissionRequiredMixin,UpdateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewPublisherForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_publish')
     model = Publisher
 
 
-class EditSerieView(UpdateView):
+class EditSerieView(PermissionRequiredMixin,UpdateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateNewSerieForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_serie')
     model = Serie
 
 
-class EditUserView(UpdateView):
+class EditUserView(PermissionRequiredMixin,UpdateView):
+    permission_required = 'shelfs.list_edit'
     form_class = CreateUserForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_user')
     model = User
+
+
+class CreateNewLoanView(CreateView):
+    template_name = 'shelfs/add.html'
+    success_url = reverse_lazy('index')
+    form_class = CreateNewLoanForm
+    def form_valid(self, form):
+        item = Item.objects.get(id=self.kwargs.get('pk'))
+        form.instance.item = item
+        user = User.objects.get(id=self.request.user.id)
+        form.instance.user = user
+        form.instance.in_loan = True
+        loan = form.save()
+        loan.save()
+        return super().form_valid(form)
+
+
+class CreateNewLentView(CreateView):
+    template_name = 'shelfs/add.html'
+    success_url = reverse_lazy('index')
+    form_class = CreateNewLentForm
+    def form_valid(self, form):
+        item = Item.objects.get(id=self.kwargs.get('pk'))
+        form.instance.item = item
+        form.instance.in_loan = True
+        lent = form.save()
+        lent.save()
+        return super().form_valid(form)

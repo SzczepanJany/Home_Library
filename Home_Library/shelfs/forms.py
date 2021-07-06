@@ -6,7 +6,7 @@ import datetime
 
 from django.forms.fields import DateField
 
-from .models import  Author, Genre, Item, Publisher, Rate, User, Serie
+from .models import  Author, Genre, Item, Loans, Publisher, Rate, User, Serie
 
 
 class LoginForm(forms.Form):
@@ -84,3 +84,16 @@ class CreateNewAuthorForm(forms.ModelForm):
         year_range = tuple([i for i in range(cur_year - 2120, cur_year)])
         widgets = {'birthday':widgets.SelectDateWidget(years=year_range),'death':widgets.SelectDateWidget(years=year_range)}
 
+
+class CreateNewLoanForm(forms.ModelForm):
+    class Meta:
+        model = Loans
+        fields = ['description','file']
+        labels = {'description':'Opis','file':'Zdjęcie'}
+
+
+class CreateNewLentForm(forms.ModelForm):
+    class Meta:
+        model = Loans
+        fields = ['user','description','file']
+        labels = {'user':'Wypożyczający','description':'Opis','file':'Zdjęcie'}

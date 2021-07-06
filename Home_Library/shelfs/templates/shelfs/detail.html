@@ -5,7 +5,10 @@
 <p><b>{{object}}</b><br>
     {{object.description}}
 {% if url == 'item' %}
+    {{object.loans.all}}
     <a href="/add_rate/{{object.id}}">Dodaj ocenę</a>
+    <a href="/add_loan/{{object.id}}">Wypożycz</a>
+    <a href="/add_lent/{{object.id}}">Pożycz</a>
     {% for rat in object.rates.all %}
         <li>Ocena: {{rat.rate}} - {{rat.user}}: {{rat.description}}</li>
     {% endfor %}

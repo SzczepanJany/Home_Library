@@ -163,12 +163,18 @@ class Item(models.Model):
     def __str__(self):
         return self.sub_name
 
-class Loan(models.Model):
+class Loans(models.Model):
     item = models.ForeignKey(Item, on_delete=CASCADE, related_name='loans')
     user = models.ForeignKey(User, on_delete=CASCADE, related_name='loans')
     date_of_loan = models.DateField(default=timezone.now)
     date_of_return = models.DateField(null=True)
-    in_loan = models.BooleanField(default=True)
+    in_loans = models.BooleanField(default=True)
     file = models.FileField(upload_to='photos/loans/%Y/%m/%d/', null=True, blank=True)
     description = models.CharField(max_length=400,null=True, blank=True)
 
+    @property
+    def sub_name(self):
+        return "{} -> {}".format(self.item, self.user )
+
+    def __str__(self):
+        return self.sub_name

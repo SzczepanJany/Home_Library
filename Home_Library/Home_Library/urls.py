@@ -55,5 +55,7 @@ urlpatterns = [
     path('detail_authr/<int:pk>/', shelf_view.AuthorDetailView.as_view(), name='detail_authr'),
     path('delete_authr/<int:pk>/', shelf_view.AuthorDeleteView.as_view(), name='delete_authr'),
     path('add_rate/<int:pk>/', shelf_view.CreateNewRateView.as_view(), name ='add_rate'),
+    path('add_loan/<int:pk>/', shelf_view.CreateNewLoanView.as_view(), name ='add_loan'),
+    path('add_lent/<int:pk>/', shelf_view.CreateNewLentView.as_view(), name ='add_lent'),
     #path('add_rate/', shelf_view.CreateNewRateView.as_view(), name ='add_rate'),
 ]
