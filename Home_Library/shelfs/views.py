@@ -465,9 +465,7 @@ class CreateNewLoanView(CreateView):
         user = User.objects.get(id=self.request.user.id)
         form.instance.user = user
         try:
-            loa = Loans.objects.get(item=item, user=user, in_loans=True)
-            response = HttpResponseRedirect()
-            response.session['warning'] = 'Przedmiot niedostępny'
+            loa = Loans.objects.get(item=item, in_loans=True)
             return redirect('/list_items/')
         except ObjectDoesNotExist:    
             form.instance.in_loans = True
@@ -484,10 +482,14 @@ class CreateNewLentView(CreateView):
     def form_valid(self, form):
         item = Item.objects.get(id=self.kwargs.get('pk'))
         form.instance.item = item
-        form.instance.in_loans = True
-        lent = form.save()
-        lent.save()
-        return super().form_valid(form)
+        try:
+            loa = Loans.objects.get(item=item, in_loans=True)
+            return redirect('/list_items/')
+        except ObjectDoesNotExist:    
+            form.instance.in_loans = True
+            loan = form.save()
+            loan.save()
+            return super().form_valid(form)
 
 
 class CreateNewReturnView(UpdateView):
@@ -498,9 +500,14 @@ class CreateNewReturnView(UpdateView):
 
     def form_valid(self, form):
         lent = self.object
-        lent.in_loans = False
-        lent.date_of_return = timezone.now()
-        lent.description = form.cleaned_data['description']
-        lent.description = form.cleaned_data['file']
-        lent.save()
-        return super().form_valid(form)
+        user = self.request.user
+        #breakpoint()
+        if form.instance.user == user:
+            lent.in_loans = False
+            lent.date_of_return = timezone.now()
+            lent.description = form.cleaned_data['description']
+            lent.description = form.cleaned_data['file']
+            lent.save()
+            return super().form_valid(form)
+        else:
+            return redirect('/list_items/')
