@@ -2,20 +2,30 @@
 {% block content %}
 
 <p>
-<p><b>{{object}}</b><br>
-    {{object.description}}
+<p><b>{{object}}</b> {{ request.session.warning }}
+
+    <a href="/edit_{{url}}/{{object.id}}">Edytuj</a>
+    <a href="/delete_{{url}}/{{object.id}}">Usuń</a>    
 {% if url == 'item' %}
-    {{object.loans.all}}
+    {% for loa in object.loans.all %}
+        <li>{{ loa.item }} - {{ loa.user }}: {{ loa.date_of_loan }} 
+           {% if loa.date_of_return %} {{ loa.date_of_return }} {% endif %}</li>
+    {% endfor %}
     <a href="/add_rate/{{object.id}}">Dodaj ocenę</a>
-    <a href="/add_loan/{{object.id}}">Wypożycz</a>
-    <a href="/add_lent/{{object.id}}">Pożycz</a>
+    {% if object.loans.last.in_loans == None or object.loans.last.in_loans == False %}
+        <a href="/add_loan/{{object.id}}">Wypożycz</a>
+        <a href="/add_lent/{{object.id}}">Pożycz</a>
+    {% elif object.loans.last.user == request.user and object.loans.last.in_loans == True%}
+            
+        <a href="/add_return/{{object.loans.last.id}}">Zwróć</a>
+    {% endif %}
     {% for rat in object.rates.all %}
         <li>Ocena: {{rat.rate}} - {{rat.user}}: {{rat.description}}</li>
     {% endfor %}
 {% endif %}
-</p>
-<a href="/edit_{{url}}/{{object.id}}">Edytuj</a>
-<a href="/delete_{{url}}/{{object.id}}">Usuń</a><br>
-</p>
 
+</p>
+<p>Opis: {{object.description}}</p>
+<a href="/add_loan/{{object.id}}">Wypożycz</a>
+</p>
 {% endblock %}

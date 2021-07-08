@@ -1,16 +1,17 @@
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import FormView, DeleteView, CreateView, ListView, UpdateView, DetailView
 from django.contrib.auth import get_user_model, login, logout, authenticate
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.utils import timezone
 
 
 from .models import Author, Item, Publisher, Serie, User, Genre, UserItem, Loans
-from .forms import CreateNewLentForm, CreateNewLoanForm, LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm, CreateNewAuthorForm
+from .forms import CreateNewLentForm, CreateNewLoanForm, CreateNewReturnForm, LoginForm, CreateUserForm, CreateNewItemForm, CreateNewGenreForm, CreateNewSerieForm, CreateNewPublisherForm, CreateNewRateForm, CreateNewAuthorForm
 
 
 # Create your views here.
@@ -457,25 +458,49 @@ class CreateNewLoanView(CreateView):
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
     form_class = CreateNewLoanForm
+    
     def form_valid(self, form):
         item = Item.objects.get(id=self.kwargs.get('pk'))
         form.instance.item = item
         user = User.objects.get(id=self.request.user.id)
         form.instance.user = user
-        form.instance.in_loan = True
-        loan = form.save()
-        loan.save()
-        return super().form_valid(form)
+        try:
+            loa = Loans.objects.get(item=item, user=user, in_loans=True)
+            response = HttpResponseRedirect()
+            response.session['warning'] = 'Przedmiot niedostępny'
+            return redirect('/list_items/')
+        except ObjectDoesNotExist:    
+            form.instance.in_loans = True
+            loan = form.save()
+            loan.save()
+            return super().form_valid(form)
 
 
 class CreateNewLentView(CreateView):
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
     form_class = CreateNewLentForm
+    
     def form_valid(self, form):
         item = Item.objects.get(id=self.kwargs.get('pk'))
         form.instance.item = item
-        form.instance.in_loan = True
+        form.instance.in_loans = True
         lent = form.save()
+        lent.save()
+        return super().form_valid(form)
+
+
+class CreateNewReturnView(UpdateView):
+    template_name = 'shelfs/add.html'
+    success_url = reverse_lazy('index')
+    form_class = CreateNewReturnForm
+    model = Loans
+
+    def form_valid(self, form):
+        lent = self.object
+        lent.in_loans = False
+        lent.date_of_return = timezone.now()
+        lent.description = form.cleaned_data['description']
+        lent.description = form.cleaned_data['file']
         lent.save()
         return super().form_valid(form)

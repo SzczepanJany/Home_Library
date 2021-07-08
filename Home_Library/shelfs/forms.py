@@ -6,6 +6,7 @@ import datetime
 
 from django.forms.fields import DateField
 
+
 from .models import  Author, Genre, Item, Loans, Publisher, Rate, User, Serie
 
 
@@ -35,7 +36,7 @@ class CreateUserForm(forms.ModelForm):
 
 
 class CreateNewItemForm(forms.ModelForm):
-    is_favourite = forms.BooleanField(initial=False, label='Do ulubionych')
+    is_favourite = forms.BooleanField(initial=False, label='Do ulubionych', required=False)
     nr_of_copies = forms.IntegerField(label='Liczba posiadanych kopii')
     class Meta:
         model = Item
@@ -97,3 +98,10 @@ class CreateNewLentForm(forms.ModelForm):
         model = Loans
         fields = ['user','description','file']
         labels = {'user':'Wypożyczający','description':'Opis','file':'Zdjęcie'}
+
+
+class CreateNewReturnForm(forms.ModelForm):
+    class Meta:
+        model = Loans
+        fields = ['description','file']
+        labels = {'description':'Opis','file':'Zdjęcie'}

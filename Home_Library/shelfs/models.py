@@ -74,7 +74,7 @@ class UserItem(models.Model):
 
 class Serie(models.Model):
     name = models.CharField(max_length=128)
-    world = models.CharField(max_length=128)
+    world = models.CharField(max_length=128, null=True)
     nr_of_volumes = models.IntegerField(default=1)
     file = models.FileField(upload_to='photos/series/%Y/%m/%d/', null=True, blank=True)
     description = models.CharField(max_length=400,null=True, blank=True)
@@ -124,7 +124,7 @@ class Author(models.Model):
     surname = models.CharField(max_length=30, null=True)
     birthday = models.DateField(null=True)
     is_dead = models.BooleanField(default=False)
-    death = models.DateField(null=True)
+    death = models.DateField(null=True, blank=True)
     plc_of_brth = models.CharField(max_length=30, null=True)
     plc_of_dth = models.CharField(max_length=30, null=True)
     nationality = CountryField()
@@ -149,9 +149,9 @@ class Item(models.Model):
     description = models.CharField(max_length=400,null=True, blank=True)
     cathegory = models.IntegerField(choices=CATHEGORY)
     year = models.IntegerField(null=True)
-    serie = models.ForeignKey(Serie, on_delete=CASCADE, null=True)
-    volume = models.IntegerField(null=True)
-    notice = models.CharField(max_length=80, null=True)
+    serie = models.ForeignKey(Serie, on_delete=CASCADE, null=True, blank=True)
+    volume = models.IntegerField(null=True, blank=True)
+    notice = models.CharField(max_length=80, null=True, blank=True)
     publisher = models.ForeignKey(Publisher, on_delete=CASCADE, null=True)
     edition = models.CharField(max_length=80, null=True)
     language = models.IntegerField(choices=LANGUAGE)
@@ -166,9 +166,9 @@ class Item(models.Model):
 class Loans(models.Model):
     item = models.ForeignKey(Item, on_delete=CASCADE, related_name='loans')
     user = models.ForeignKey(User, on_delete=CASCADE, related_name='loans')
-    date_of_loan = models.DateField(default=timezone.now)
-    date_of_return = models.DateField(null=True)
-    in_loans = models.BooleanField(default=True)
+    date_of_loan = models.DateTimeField(default=timezone.now)
+    date_of_return = models.DateTimeField(null=True)
+    in_loans = models.BooleanField(default=True, null=True)
     file = models.FileField(upload_to='photos/loans/%Y/%m/%d/', null=True, blank=True)
     description = models.CharField(max_length=400,null=True, blank=True)
 
