@@ -70,7 +70,7 @@ class UserItem(models.Model):
 
 
 class Serie(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
     world = models.CharField(max_length=128, null=True)
     nr_of_volumes = models.IntegerField(default=1)
     file = models.FileField(upload_to='photos/series/%Y/%m/%d/', null=True, blank=True)
