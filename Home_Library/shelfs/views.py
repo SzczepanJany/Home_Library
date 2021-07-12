@@ -1,11 +1,9 @@
-from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import FormView, DeleteView, CreateView, ListView, UpdateView, DetailView
-from django.contrib.auth import get_user_model, login, logout, authenticate
+from django.views.generic import DeleteView, CreateView, ListView, UpdateView, DetailView
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.utils import timezone
 
@@ -31,7 +29,8 @@ class GenreListView(PermissionRequiredMixin, ListView):
         context['url'] = 'genre'
         return context
 
-class GenreDetailView(PermissionRequiredMixin,DetailView):
+
+class GenreDetailView(PermissionRequiredMixin, DetailView):
     permission_required = 'shelfs.view_genre'
     login_url = reverse_lazy('main')
     model = Genre
@@ -43,7 +42,8 @@ class GenreDetailView(PermissionRequiredMixin,DetailView):
         context['url'] = 'genre'
         return context
 
-class SerieDetailView(PermissionRequiredMixin,DetailView):
+
+class SerieDetailView(PermissionRequiredMixin, DetailView):
     permission_required = 'shelfs.view_serie'
     login_url = reverse_lazy('main')
     model = Serie
@@ -56,7 +56,7 @@ class SerieDetailView(PermissionRequiredMixin,DetailView):
         return context
 
 
-class PublisherDetailView(PermissionRequiredMixin,DetailView):
+class PublisherDetailView(PermissionRequiredMixin, DetailView):
     permission_required = 'shelfs.view_publisher'
     login_url = reverse_lazy('main')
     model = Publisher
@@ -70,7 +70,7 @@ class PublisherDetailView(PermissionRequiredMixin,DetailView):
         return context
 
 
-class ItemDetailView(PermissionRequiredMixin,DetailView):
+class ItemDetailView(PermissionRequiredMixin, DetailView):
     permission_required = 'shelfs.view_item'
     login_url = reverse_lazy('main')
     model = Item
@@ -83,7 +83,7 @@ class ItemDetailView(PermissionRequiredMixin,DetailView):
         return context
 
 
-class UserDetailView(PermissionRequiredMixin,DetailView):
+class UserDetailView(PermissionRequiredMixin, DetailView):
     permission_required = 'shelfs.view_user'
     login_url = reverse_lazy('main')
     model = User
@@ -96,7 +96,7 @@ class UserDetailView(PermissionRequiredMixin,DetailView):
         return context
 
 
-class AuthorDetailView(PermissionRequiredMixin,DetailView):
+class AuthorDetailView(PermissionRequiredMixin, DetailView):
     permission_required = 'shelfs.view_author'
     login_url = reverse_lazy('main')
     model = Author
@@ -109,7 +109,7 @@ class AuthorDetailView(PermissionRequiredMixin,DetailView):
         return context
 
 
-class PublisherDeleteView(PermissionRequiredMixin,DeleteView):
+class PublisherDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_publisher'
     template_name = 'shelfs/delete.html'
     model = Publisher
@@ -123,7 +123,7 @@ class PublisherDeleteView(PermissionRequiredMixin,DeleteView):
         return context
 
 
-class UserDeleteView(PermissionRequiredMixin,DeleteView):
+class UserDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_user'
     template_name = 'shelfs/delete.html'
     model = User
@@ -137,7 +137,7 @@ class UserDeleteView(PermissionRequiredMixin,DeleteView):
         return context
 
 
-class AuthorDeleteView(PermissionRequiredMixin,DeleteView):
+class AuthorDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_author'
     template_name = 'shelfs/delete.html'
     model = Author
@@ -151,7 +151,7 @@ class AuthorDeleteView(PermissionRequiredMixin,DeleteView):
         return context
 
 
-class SerieDeleteView(PermissionRequiredMixin,DeleteView):
+class SerieDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_serie'
     template_name = 'shelfs/delete.html'
     model = Serie
@@ -165,7 +165,7 @@ class SerieDeleteView(PermissionRequiredMixin,DeleteView):
         return context
 
 
-class GenreDeleteView(PermissionRequiredMixin,DeleteView):
+class GenreDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_genre'
     template_name = 'shelfs/delete.html'
     model = Genre
@@ -178,7 +178,7 @@ class GenreDeleteView(PermissionRequiredMixin,DeleteView):
         return context
 
 
-class ItemDeleteView(PermissionRequiredMixin,DeleteView):
+class ItemDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_item'
     template_name = 'shelfs/delete.html'
     model = Item
@@ -191,7 +191,7 @@ class ItemDeleteView(PermissionRequiredMixin,DeleteView):
         return context
 
 
-class ItemListView(PermissionRequiredMixin,ListView):
+class ItemListView(PermissionRequiredMixin, ListView):
     permission_required = 'shelfs.view_item'
     login_url = reverse_lazy('main')
     model = Item
@@ -205,7 +205,7 @@ class ItemListView(PermissionRequiredMixin,ListView):
         return context
 
 
-class AuthorListView(PermissionRequiredMixin,ListView):
+class AuthorListView(PermissionRequiredMixin, ListView):
     permission_required = 'shelfs.view_author'
     login_url = reverse_lazy('main')
     model = Author
@@ -219,13 +219,13 @@ class AuthorListView(PermissionRequiredMixin,ListView):
         return context
 
 
-class SerieListView(PermissionRequiredMixin,ListView):
+class SerieListView(PermissionRequiredMixin, ListView):
     permission_required = 'shelfs.view_serie'
     login_url = reverse_lazy('main')
     model = Serie
     context_object_name = 'items'
     template_name = 'shelfs/list.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['descr'] = 'Seria: '
@@ -233,7 +233,7 @@ class SerieListView(PermissionRequiredMixin,ListView):
         return context
 
 
-class PublisherListView(PermissionRequiredMixin,ListView):
+class PublisherListView(PermissionRequiredMixin, ListView):
     permission_required = 'shelfs.view_publisher'
     login_url = reverse_lazy('main')
     model = Publisher
@@ -246,7 +246,8 @@ class PublisherListView(PermissionRequiredMixin,ListView):
         context['url'] = 'publish'
         return context
 
-class UserListView(PermissionRequiredMixin,ListView):
+
+class UserListView(PermissionRequiredMixin, ListView):
     permission_required = 'shelfs.view_user'
     login_url = reverse_lazy('main')
     model = User
@@ -264,10 +265,11 @@ class LoginView(View):
     def get(self, request, *args, **kwargs):
         form = LoginForm
         return render(request, 'shelfs/main.html', {'form': form})
+
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
         if form.is_valid():
-            user = authenticate(username = form.cleaned_data['username'], password = form.cleaned_data['password'])
+            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
                 return redirect('/list_items/')
@@ -283,7 +285,7 @@ class UserLogoutView(View):
         return redirect("index")
 
 
-class CreateUserView(PermissionRequiredMixin,CreateView):
+class CreateUserView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_user'
     login_url = reverse_lazy('main')
     form_class = CreateUserForm
@@ -295,11 +297,11 @@ class CreateUserView(PermissionRequiredMixin,CreateView):
         user.is_active = True
         user.set_password(form.cleaned_data['password'])
         user.save()
-        #breakpoint()
+        # breakpoint()
         return super().form_valid(form)
 
 
-class CreateNewItemView(PermissionRequiredMixin,CreateView):
+class CreateNewItemView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_item'
     form_class = CreateNewItemForm
     template_name = 'shelfs/add.html'
@@ -311,11 +313,11 @@ class CreateNewItemView(PermissionRequiredMixin,CreateView):
         user_item = UserItem.objects.create(user=user, item=item)
         user_item.favourite = form.cleaned_data['is_favourite']
         user_item.nr_of_copies = form.cleaned_data['nr_of_copies']
-        #breakpoint()
+        # breakpoint()
         return super().form_valid(form)
-        
 
-class CreateNewAuthorView(PermissionRequiredMixin,CreateView):
+
+class CreateNewAuthorView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_author'
     form_class = CreateNewAuthorForm
     template_name = 'shelfs/add.html'
@@ -324,11 +326,11 @@ class CreateNewAuthorView(PermissionRequiredMixin,CreateView):
     def form_valid(self, form):
         item = form.save()
         item.save()
-        #breakpoint()
+        # breakpoint()
         return super().form_valid(form)
 
 
-class CreateNewGenreView(PermissionRequiredMixin,CreateView):
+class CreateNewGenreView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_genre'
     form_class = CreateNewGenreForm
     template_name = 'shelfs/add.html'
@@ -337,11 +339,11 @@ class CreateNewGenreView(PermissionRequiredMixin,CreateView):
     def form_valid(self, form):
         genre = form.save()
         genre.save()
-        #breakpoint()
+        # breakpoint()
         return super().form_valid(form)
 
 
-class CreateNewSerieView(PermissionRequiredMixin,CreateView):
+class CreateNewSerieView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_serie'
     form_class = CreateNewSerieForm
     template_name = 'shelfs/add.html'
@@ -353,7 +355,7 @@ class CreateNewSerieView(PermissionRequiredMixin,CreateView):
         return super().form_valid(form)
 
 
-class CreateNewPublisherView(PermissionRequiredMixin,CreateView):
+class CreateNewPublisherView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_publisher'
     form_class = CreateNewPublisherForm
     template_name = 'shelfs/add.html'
@@ -365,25 +367,23 @@ class CreateNewPublisherView(PermissionRequiredMixin,CreateView):
         return super().form_valid(form)
 
 
-class CreateNewRateView(PermissionRequiredMixin,CreateView):
+class CreateNewRateView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_rate'
     form_class = CreateNewRateForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
-        
         item = Item.objects.get(id=self.kwargs.get('pk'))
         form.instance.item = item
         user = User.objects.get(id=self.request.user.id)
-        
         form.instance.user = user
         rate = form.save()
         rate.save()
         return super().form_valid(form)
 
 
-class EditItemView(PermissionRequiredMixin,UpdateView):
+class EditItemView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_item'
     form_class = CreateNewItemForm
     template_name = 'shelfs/edit.html'
@@ -392,9 +392,8 @@ class EditItemView(PermissionRequiredMixin,UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        #does not exist
-        user = self.request.user
-
+        # does not exist
+        # user = self.request.user
         try:
             us_it = UserItem.objects.get(item=self.object, user=self.request.user)
         except ObjectDoesNotExist:
@@ -414,7 +413,7 @@ class EditItemView(PermissionRequiredMixin,UpdateView):
         return init_da
 
 
-class EditAuthorView(PermissionRequiredMixin,UpdateView):
+class EditAuthorView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_author'
     form_class = CreateNewAuthorForm
     template_name = 'shelfs/edit.html'
@@ -422,7 +421,7 @@ class EditAuthorView(PermissionRequiredMixin,UpdateView):
     model = Author
 
 
-class EditGenreView(PermissionRequiredMixin,UpdateView):
+class EditGenreView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_genre'
     form_class = CreateNewGenreForm
     template_name = 'shelfs/edit.html'
@@ -430,7 +429,7 @@ class EditGenreView(PermissionRequiredMixin,UpdateView):
     model = Genre
 
 
-class EditPublisherView(PermissionRequiredMixin,UpdateView):
+class EditPublisherView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_publisher'
     form_class = CreateNewPublisherForm
     template_name = 'shelfs/edit.html'
@@ -438,7 +437,7 @@ class EditPublisherView(PermissionRequiredMixin,UpdateView):
     model = Publisher
 
 
-class EditSerieView(PermissionRequiredMixin,UpdateView):
+class EditSerieView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_serie'
     form_class = CreateNewSerieForm
     template_name = 'shelfs/edit.html'
@@ -446,7 +445,7 @@ class EditSerieView(PermissionRequiredMixin,UpdateView):
     model = Serie
 
 
-class EditUserView(PermissionRequiredMixin,UpdateView):
+class EditUserView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_user'
     form_class = CreateUserForm
     template_name = 'shelfs/edit.html'
@@ -454,12 +453,12 @@ class EditUserView(PermissionRequiredMixin,UpdateView):
     model = User
 
 
-class CreateNewLoanView(PermissionRequiredMixin,CreateView):
+class CreateNewLoanView(PermissionRequiredMixin, CreateView):
     template_name = 'shelfs/add.html'
     permission_required = 'shelfs.add_loans'
     success_url = reverse_lazy('index')
     form_class = CreateNewLoanForm
-    
+
     def form_valid(self, form):
         item = Item.objects.get(id=self.kwargs.get('pk'))
         form.instance.item = item
@@ -468,33 +467,33 @@ class CreateNewLoanView(PermissionRequiredMixin,CreateView):
         try:
             loa = Loans.objects.get(item=item, in_loans=True)
             return redirect('/list_items/')
-        except ObjectDoesNotExist:    
+        except ObjectDoesNotExist:
             form.instance.in_loans = True
             loan = form.save()
             loan.save()
             return super().form_valid(form)
 
 
-class CreateNewLentView(PermissionRequiredMixin,CreateView):
+class CreateNewLentView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_loans'
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
     form_class = CreateNewLentForm
-    
+
     def form_valid(self, form):
         item = Item.objects.get(id=self.kwargs.get('pk'))
         form.instance.item = item
         try:
             loa = Loans.objects.get(item=item, in_loans=True)
             return redirect('/list_items/')
-        except ObjectDoesNotExist:    
+        except ObjectDoesNotExist:
             form.instance.in_loans = True
             loan = form.save()
             loan.save()
             return super().form_valid(form)
 
 
-class CreateNewReturnView(PermissionRequiredMixin,UpdateView):
+class CreateNewReturnView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_loans'
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
@@ -504,7 +503,7 @@ class CreateNewReturnView(PermissionRequiredMixin,UpdateView):
     def form_valid(self, form):
         lent = self.object
         user = self.request.user
-        #breakpoint()
+        # breakpoint()
         if form.instance.user == user:
             lent.in_loans = False
             lent.date_of_return = timezone.now()

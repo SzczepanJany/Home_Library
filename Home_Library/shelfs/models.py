@@ -2,12 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.deletion import CASCADE
 from django_countries.fields import CountryField
-from datetime import date
 from django.conf import settings
 from django.utils import timezone
-from pkg_resources import require
 
-from Home_Library.settings import LANGUAGE_CODE
 
 CATHEGORY = (
     (1, 'Book'),
@@ -39,7 +36,7 @@ RATE = (
     (6, 'Briliant'),
 )
 
-LANGUAGE=(
+LANGUAGE = (
     (1, 'Polish'),
     (2, 'English'),
     (3, 'German'),
@@ -53,7 +50,7 @@ class User(AbstractUser):
     surname = models.CharField(max_length=30, null=True)
     birthday = models.DateField(null=True)
     file = models.FileField(upload_to='photos/users/%Y/%m/%d/', null=True, blank=True)
-    description = models.CharField(max_length=400,null=True, blank=True)
+    description = models.CharField(max_length=400, null=True, blank=True)
 
     @property
     def sub_name(self):
@@ -77,7 +74,7 @@ class Serie(models.Model):
     world = models.CharField(max_length=128, null=True)
     nr_of_volumes = models.IntegerField(default=1)
     file = models.FileField(upload_to='photos/series/%Y/%m/%d/', null=True, blank=True)
-    description = models.CharField(max_length=400,null=True, blank=True)
+    description = models.CharField(max_length=400, null=True, blank=True)
 
     @property
     def sub_name(self):
@@ -86,12 +83,13 @@ class Serie(models.Model):
     def __str__(self):
         return self.sub_name
 
+
 class Publisher(models.Model):
     name = models.CharField(max_length=128, unique=True)
     city = models.CharField(max_length=128, null=True)
     country = CountryField()
     file = models.FileField(upload_to='photos/publishers/%Y/%m/%d/', null=True, blank=True)
-    description = models.CharField(max_length=400,null=True, blank=True)
+    description = models.CharField(max_length=400, null=True, blank=True)
 
     @property
     def sub_name(self):
@@ -119,6 +117,7 @@ class Genre(models.Model):
     def __str__(self):
         return self.sub_name
 
+
 class Author(models.Model):
     name = models.CharField(max_length=30, null=True)
     surname = models.CharField(max_length=30, null=True)
@@ -129,7 +128,7 @@ class Author(models.Model):
     plc_of_dth = models.CharField(max_length=30, null=True)
     nationality = CountryField()
     file = models.FileField(upload_to='photos/users/%Y/%m/%d/', null=True, blank=True)
-    description = models.CharField(max_length=400,null=True, blank=True)
+    description = models.CharField(max_length=400, null=True, blank=True)
 
     @property
     def sub_name(self):
@@ -146,7 +145,7 @@ class Item(models.Model):
     isbn = models.CharField(max_length=13)
     genre = models.ManyToManyField(Genre)
     file = models.FileField(upload_to='photos/items/%Y/%m/%d/', null=True, blank=True)
-    description = models.CharField(max_length=400,null=True, blank=True)
+    description = models.CharField(max_length=400, null=True, blank=True)
     cathegory = models.IntegerField(choices=CATHEGORY)
     year = models.IntegerField(null=True)
     serie = models.ForeignKey(Serie, on_delete=CASCADE, null=True, blank=True)
@@ -158,10 +157,11 @@ class Item(models.Model):
 
     @property
     def sub_name(self):
-        return "{}".format(self.title )
+        return "{}".format(self.title)
 
     def __str__(self):
         return self.sub_name
+
 
 class Loans(models.Model):
     item = models.ForeignKey(Item, on_delete=CASCADE, related_name='loans')
@@ -170,11 +170,11 @@ class Loans(models.Model):
     date_of_return = models.DateTimeField(null=True)
     in_loans = models.BooleanField(default=True, null=True)
     file = models.FileField(upload_to='photos/loans/%Y/%m/%d/', null=True, blank=True)
-    description = models.CharField(max_length=400,null=True, blank=True)
+    description = models.CharField(max_length=400, null=True, blank=True)
 
     @property
     def sub_name(self):
-        return "{} -> {}".format(self.item, self.user )
+        return "{} -> {}".format(self.item, self.user)
 
     def __str__(self):
         return self.sub_name
