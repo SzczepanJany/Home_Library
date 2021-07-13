@@ -1,6 +1,25 @@
 import pytest
+from django.contrib.auth.models import Permission
 
-from shelfs.models import Author, Serie
+from shelfs.models import Author, Serie, User
+
+
+@pytest.fixture
+def logged_in_client(client):
+    p = Permission.objects.get(codename='view_serie')
+    p2 = Permission.objects.get(codename='add_serie')
+    p3 = Permission.objects.get(codename='view_author')
+    p4 = Permission.objects.get(codename='add_author')
+    us = User.objects.create_user(
+        username="test",
+        password="pass",
+    )
+    us.user_permissions.add(p)
+    us.user_permissions.add(p2)
+    us.user_permissions.add(p3)
+    us.user_permissions.add(p4)
+    client.login(username='test', password='pass')
+
 
 @pytest.fixture
 def author():
@@ -30,4 +49,4 @@ def serie():
 def series():
     names = ['Tytani','Herosi', 'Samobójcy']
     for name in names:
-        Author.objects.create(name=name, world='test')
+        Serie.objects.create(name=name, world='test')
