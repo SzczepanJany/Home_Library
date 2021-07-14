@@ -8,6 +8,7 @@ def test_serie_detail_view(client, serie, logged_in_client):
     logged_in_client
     response = client.get(f'/detail_serie/{id}/')
     assert response.status_code == 200
+    assert response.context['serie'].name == serie.name
 
 
 @pytest.mark.django_db
@@ -22,14 +23,3 @@ def test_add_serie_view(client, logged_in_client):
     )
     assert response.status_code == 302
     assert Serie.objects.get(name=name)
-
-@pytest.mark.django_db
-def test_serie_list_view(series, client, logged_in_client):
-    logged_in_client
-    response = client.get('/list_serie/')
-    assert response.status_code == 200
-    serie_from_context = response.context['names']
-    li1 = list(serie_from_context.values_list('name', flat=True))
-    li2 = list(serie_from_context.values_list('name', flat=True))
-    li2.sort()
-    assert li1 == li2
