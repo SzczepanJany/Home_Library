@@ -111,6 +111,7 @@ class AuthorDetailView(PermissionRequiredMixin, DetailView):
 
 class PublisherDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_publisher'
+    login_url = reverse_lazy('main')
     template_name = 'shelfs/delete.html'
     model = Publisher
     context_object_name = 'item'
@@ -125,6 +126,7 @@ class PublisherDeleteView(PermissionRequiredMixin, DeleteView):
 
 class UserDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_user'
+    login_url = reverse_lazy('main')
     template_name = 'shelfs/delete.html'
     model = User
     context_object_name = 'item'
@@ -139,6 +141,7 @@ class UserDeleteView(PermissionRequiredMixin, DeleteView):
 
 class AuthorDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_author'
+    login_url = reverse_lazy('main')
     template_name = 'shelfs/delete.html'
     model = Author
     context_object_name = 'item'
@@ -153,6 +156,7 @@ class AuthorDeleteView(PermissionRequiredMixin, DeleteView):
 
 class SerieDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_serie'
+    login_url = reverse_lazy('main')
     template_name = 'shelfs/delete.html'
     model = Serie
     context_object_name = 'item'
@@ -167,6 +171,7 @@ class SerieDeleteView(PermissionRequiredMixin, DeleteView):
 
 class GenreDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_genre'
+    login_url = reverse_lazy('main')
     template_name = 'shelfs/delete.html'
     model = Genre
     success_url = reverse_lazy('list_genre')
@@ -180,6 +185,7 @@ class GenreDeleteView(PermissionRequiredMixin, DeleteView):
 
 class ItemDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shelfs.delete_item'
+    login_url = reverse_lazy('main')
     template_name = 'shelfs/delete.html'
     model = Item
     success_url = reverse_lazy('index')
@@ -303,6 +309,7 @@ class CreateUserView(PermissionRequiredMixin, CreateView):
 
 class CreateNewItemView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_item'
+    login_url = reverse_lazy('main')
     form_class = CreateNewItemForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
@@ -319,6 +326,7 @@ class CreateNewItemView(PermissionRequiredMixin, CreateView):
 
 class CreateNewAuthorView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_author'
+    login_url = reverse_lazy('main')
     form_class = CreateNewAuthorForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('list_authr')
@@ -332,6 +340,7 @@ class CreateNewAuthorView(PermissionRequiredMixin, CreateView):
 
 class CreateNewGenreView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_genre'
+    login_url = reverse_lazy('main')
     form_class = CreateNewGenreForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('list_genre')
@@ -345,6 +354,7 @@ class CreateNewGenreView(PermissionRequiredMixin, CreateView):
 
 class CreateNewSerieView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_serie'
+    login_url = reverse_lazy('main')
     form_class = CreateNewSerieForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('list_serie')
@@ -357,6 +367,7 @@ class CreateNewSerieView(PermissionRequiredMixin, CreateView):
 
 class CreateNewPublisherView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_publisher'
+    login_url = reverse_lazy('main')
     form_class = CreateNewPublisherForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('list_publish')
@@ -369,6 +380,7 @@ class CreateNewPublisherView(PermissionRequiredMixin, CreateView):
 
 class CreateNewRateView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_rate'
+    login_url = reverse_lazy('main')
     form_class = CreateNewRateForm
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
@@ -385,6 +397,7 @@ class CreateNewRateView(PermissionRequiredMixin, CreateView):
 
 class EditItemView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_item'
+    login_url = reverse_lazy('main')
     form_class = CreateNewItemForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('index')
@@ -415,6 +428,7 @@ class EditItemView(PermissionRequiredMixin, UpdateView):
 
 class EditAuthorView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_author'
+    login_url = reverse_lazy('main')
     form_class = CreateNewAuthorForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_authr')
@@ -423,6 +437,7 @@ class EditAuthorView(PermissionRequiredMixin, UpdateView):
 
 class EditGenreView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_genre'
+    login_url = reverse_lazy('main')
     form_class = CreateNewGenreForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_genre')
@@ -431,6 +446,7 @@ class EditGenreView(PermissionRequiredMixin, UpdateView):
 
 class EditPublisherView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_publisher'
+    login_url = reverse_lazy('main')
     form_class = CreateNewPublisherForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_publish')
@@ -439,6 +455,7 @@ class EditPublisherView(PermissionRequiredMixin, UpdateView):
 
 class EditSerieView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_serie'
+    login_url = reverse_lazy('main')
     form_class = CreateNewSerieForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_serie')
@@ -447,6 +464,7 @@ class EditSerieView(PermissionRequiredMixin, UpdateView):
 
 class EditUserView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_user'
+    login_url = reverse_lazy('main')
     form_class = CreateUserForm
     template_name = 'shelfs/edit.html'
     success_url = reverse_lazy('list_user')
@@ -456,6 +474,7 @@ class EditUserView(PermissionRequiredMixin, UpdateView):
 class CreateNewLoanView(PermissionRequiredMixin, CreateView):
     template_name = 'shelfs/add.html'
     permission_required = 'shelfs.add_loans'
+    login_url = reverse_lazy('main')
     success_url = reverse_lazy('index')
     form_class = CreateNewLoanForm
 
@@ -476,6 +495,7 @@ class CreateNewLoanView(PermissionRequiredMixin, CreateView):
 
 class CreateNewLentView(PermissionRequiredMixin, CreateView):
     permission_required = 'shelfs.add_loans'
+    login_url = reverse_lazy('main')
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
     form_class = CreateNewLentForm
@@ -495,6 +515,7 @@ class CreateNewLentView(PermissionRequiredMixin, CreateView):
 
 class CreateNewReturnView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shelfs.change_loans'
+    login_url = reverse_lazy('main')
     template_name = 'shelfs/add.html'
     success_url = reverse_lazy('index')
     form_class = CreateNewReturnForm

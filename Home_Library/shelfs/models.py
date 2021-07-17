@@ -4,7 +4,7 @@ from django.db.models.deletion import CASCADE
 from django_countries.fields import CountryField
 from django.conf import settings
 from django.utils import timezone
-
+from django.urls import reverse
 
 CATHEGORY = (
     (1, 'Book'),
@@ -83,6 +83,8 @@ class Serie(models.Model):
     def __str__(self):
         return self.sub_name
 
+    def get_absolute_url(self):
+        return reverse('detail_serie', kwargs = {'pk':self.pk})
 
 class Publisher(models.Model):
     name = models.CharField(max_length=128, unique=True)

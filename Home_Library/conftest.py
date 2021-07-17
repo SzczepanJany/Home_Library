@@ -129,3 +129,11 @@ def rate():
     
     rate = '4'
     )
+
+
+@pytest.fixture
+def series():
+    names = ['jogurt','truskawka', 'banan']
+    for name in names:
+        Serie.objects.create(name=name, description='test')
+        

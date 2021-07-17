@@ -5,7 +5,7 @@
             
                 <p>
                     <li>{{descr}} <a href="/detail_{{url}}/{{item.id}}">{{item}}</a>
-                    
+                    <li>{{descr}} <a href={{item.get_absolute_url}}>{{item}}</a>
                 </p>
             
         {% endfor %}
